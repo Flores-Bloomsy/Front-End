@@ -1,12 +1,18 @@
 "user client";
+import { Link } from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Typography, Container, Box } from "@mui/material";
 import InputField from "@/components/InputField";
 import { useTheme } from "@mui/material/styles";
 import ToggleLineButtons from "@/components/ToggleLineButtons";
+import { Signup } from "../../utils/api";
+import { useSnackbar } from "notistack";
 
 export default function Register() {
   const theme = useTheme();
+  const router = useRouter();
   const {
     handleSubmit,
     control,
@@ -14,8 +20,49 @@ export default function Register() {
     formState: { errors, isSubmitted },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const onSubmit = async (data) => {
+    console.log("data", data);
+    try {
+      setIsSubmitting(true);
+      setErrorMessage("");
+
+      const response = await Signup(data.email, data.password);
+
+      if (response) {
+        router.push("/register-user/login");
+      }
+    } catch (error) {
+      console.error("sign up Error:", error);
+
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        const message = error.response.data.message;
+        if (message === "User already exists") {
+          enqueueSnackbar("Este correo ya está registrado. Intenta con otro.", {
+            variant: "error",
+          });
+        } else {
+          enqueueSnackbar("Hubo un error. Intenta nuevamente.", {
+            variant: "error",
+          });
+        }
+      } else {
+        enqueueSnackbar("Este correo ya está registrado. Intenta con otro.", {
+          variant: "error",
+          style: {
+            backgroundColor: "#741C28",
+          },
+        });
+      }
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -165,15 +212,77 @@ export default function Register() {
                 value === watch("password") || "Los passwords no coinciden",
             }}
           />
+          {errorMessage && (
+            <Typography
+              variant="body2"
+              color="error"
+              sx={{ textAlign: "center", marginBottom: "1rem" }}
+            >
+              {errorMessage}
+            </Typography>
+          )}
 
           <Button
             type="submit"
             variant="contained"
             color="primary"
             style={{ marginTop: "1rem" }}
+            disabled={isSubmitting}
           >
-            INICIAR SESION
+            {isSubmitting ? "Registrando..." : "Registrarse"}
           </Button>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Box
+              sx={{
+                width: "45%",
+                height: "1px",
+                backgroundColor: "#FF7957",
+                marginY: "0,5rem",
+              }}
+            />
+            <Box sx={{ color: "#FF7957" }}>0</Box>
+            <Box
+              sx={{
+                width: "45%",
+                height: "1px",
+                backgroundColor: "#FF7957",
+                marginY: "0,5rem",
+              }}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              variant="body1"
+              sx={{
+                fontFamily: theme.typography.fontFamily,
+                fontSize: 14,
+                textAlign: "center",
+                marginBottom: "15px",
+              }}
+            >
+              Al crear tu cuenta de usuario en FloriApp, aceptas los{" "}
+              <span style={{ color: "#FF7957" }}>Términos y Condiciones</span> y
+              <span style={{ color: "#FF7957" }}>
+                el Aviso <br />
+                de privacidad
+              </span>
+              del servicio
+            </Typography>
+          </Box>
         </form>
       </Box>
     </Container>

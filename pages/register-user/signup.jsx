@@ -228,6 +228,12 @@ export default function Register() {
             color="primary"
             style={{ marginTop: "1rem" }}
             disabled={isSubmitting}
+            sx={{
+              borderTopLeftRadius: "16px",
+              borderBottomRightRadius: "16px",
+              borderTopRightRadius: "0",
+              borderBottomLeftRadius: "0",
+            }}
           >
             {isSubmitting ? "Registrando..." : "Registrarse"}
           </Button>

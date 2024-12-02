@@ -8,6 +8,9 @@ const theme = createTheme({
     secondary: {
       main: "#FFB8A7",
     },
+    tertiary: {
+      main: "#FF7957",
+    },
     background: {
       default: "#FFF5EE",
     },
@@ -17,12 +20,21 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: "Nunito, sans-serif",
+    fontWeight: 600,
 
+    body1: {
+      fontFamily: "Nunito, sans-serif",
+      fontWeight: 600,
+    },
     h1: {
       fontFamily: "Lora, serif",
+      fontSize: "2.25rem",
+      fontWeight: 600,
     },
     h2: {
       fontFamily: "Lora, serif",
+      fontSize: "2rem",
+      fontWeight: 600,
     },
     h3: {
       fontFamily: "Lora, serif",

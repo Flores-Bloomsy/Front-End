@@ -26,7 +26,7 @@ export default function ResponsiveNavBar() {
         borderBottom: "none",
       }}
     >
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <Toolbar>
           <FilterVintageIcon />
 

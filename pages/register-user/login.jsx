@@ -7,11 +7,11 @@ import { Button, Typography, Container, Box } from "@mui/material";
 import InputField from "@/components/InputField";
 import { useTheme } from "@mui/material/styles";
 import ToggleLineButtons from "@/components/ToggleLineButtons";
-import { Signup } from "../../utils/api";
+import { Login } from "../../utils/api";
 import { useSnackbar } from "notistack";
 import ImageContainer from "@/components/ImageContainer";
 
-export default function Register() {
+export default function HandleLogin() {
   const theme = useTheme();
   const router = useRouter();
   const {
@@ -26,42 +26,24 @@ export default function Register() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const onSubmit = async (data) => {
-    console.log("data", data);
     try {
       setIsSubmitting(true);
       setErrorMessage("");
 
-      const response = await Signup(data.email, data.password);
+      const response = await Login(data.email, data.password);
 
       if (response) {
-        router.push("/register-user/login");
+        localStorage.setItem("Token", response.token);
+        router.push("/");
+      } else {
+        setErrorMessage("Credenciales incorrectas");
+        setIsSubmitting(false);
       }
     } catch (error) {
-      console.error("sign up Error:", error);
-
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        const message = error.response.data.message;
-        if (message === "User already exists") {
-          enqueueSnackbar("Este correo ya está registrado. Intenta con otro.", {
-            variant: "error",
-          });
-        } else {
-          enqueueSnackbar("Hubo un error. Intenta nuevamente.", {
-            variant: "error",
-          });
-        }
-      } else {
-        enqueueSnackbar("Este correo ya está registrado. Intenta con otro.", {
-          variant: "error",
-          style: {
-            backgroundColor: "#741C28",
-          },
-        });
-      }
+      console.error("Error al iniciar sesión:", error);
+      setErrorMessage(
+        "Hubo un error al intentar iniciar sesión. Intenta nuevamente."
+      );
       setIsSubmitting(false);
     }
   };
@@ -129,6 +111,8 @@ export default function Register() {
           sx={{
             display: "flex",
             flexDirection: "column",
+            width: "400px",
+            height: "600px",
           }}
         >
           <Box
@@ -154,7 +138,7 @@ export default function Register() {
                 justifyContent: "center",
               }}
             >
-              Registrate
+              Iniciar sesión
             </Typography>
             <Box
               sx={{
@@ -266,9 +250,19 @@ export default function Register() {
                   borderBottomLeftRadius: "0",
                 }}
               >
-                {isSubmitting ? "Registrando..." : "Registrarse"}
+                {isSubmitting ? "Loading..." : "iniciar sesion"}
               </Button>
-
+              <Typography
+                variant="body1"
+                sx={{
+                  fontFamily: theme.typography.fontFamily,
+                  fontSize: 14,
+                  textAlign: "center",
+                  marginBottom: "15px",
+                }}
+              >
+                Publicar mi negocio en FloriApp
+              </Typography>
               <Box
                 sx={{
                   display: "flex",
@@ -302,26 +296,6 @@ export default function Register() {
                   alignItems: "center",
                 }}
               >
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontFamily: theme.typography.fontFamily,
-                    fontSize: 14,
-                    textAlign: "center",
-                    marginBottom: "15px",
-                  }}
-                >
-                  Al crear tu cuenta de usuario en FloriApp, aceptas los{" "}
-                  <span style={{ color: "#FF7957" }}>
-                    Términos y Condiciones
-                  </span>{" "}
-                  y
-                  <span style={{ color: "#FF7957" }}>
-                    el Aviso <br />
-                    de privacidad
-                  </span>
-                  del servicio
-                </Typography>
                 <Link href={"/register-user/login"}>
                   <Typography
                     component="body1"
@@ -332,7 +306,7 @@ export default function Register() {
                       textDecoration: "none",
                     }}
                   >
-                    Inicia sesión
+                    ¿Has olvidado tu contraseña?
                   </Typography>
                 </Link>
               </Box>
@@ -340,7 +314,7 @@ export default function Register() {
           </Box>
         </Box>
         <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
-          <ImageContainer image="/flores-en-harron.jpg" />
+          <ImageContainer height={601} image="/flores.vertical.jpg" />
         </Box>
       </Box>
     </Container>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button } from "@mui/material";
 
-const ToggleLineButtons = () => {
+function ToggleLineButtons() {
   const [activeSide, setActiveSide] = useState("left");
 
   return (
@@ -72,6 +72,6 @@ const ToggleLineButtons = () => {
       </Button>
     </Box>
   );
-};
+}
 
 export default ToggleLineButtons;

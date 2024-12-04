@@ -11,7 +11,7 @@ import { Login } from "../../utils/api";
 import { useSnackbar } from "notistack";
 import ImageContainer from "@/components/ImageContainer";
 
-export default function HandleLogin() {
+export default function LoginSeller() {
   const theme = useTheme();
   const router = useRouter();
   const {
@@ -126,7 +126,6 @@ export default function HandleLogin() {
             display: "flex",
             flexDirection: "column",
             width: "400px",
-            height: "100%",
           }}
         >
           <Box
@@ -153,6 +152,8 @@ export default function HandleLogin() {
               }}
             >
               Iniciar sesión
+              <br />
+              como vendedor
             </Typography>
             <Box
               sx={{
@@ -335,7 +336,7 @@ export default function HandleLogin() {
             display: { xs: "none", sm: "none", md: "block", height: "100%" },
           }}
         >
-          <ImageContainer height={500} image="/flores.vertical.jpg" />
+          <ImageContainer height={500} image="/negocio-flores-shop.avif" />
         </Box>
       </Box>
     </Container>

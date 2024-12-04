@@ -1,8 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button } from "@mui/material";
 
-function ToggleLineButtons() {
+import { useRouter } from "next/router";
+
+function ToggleLineButtons({ user, seller }) {
   const [activeSide, setActiveSide] = useState("left");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.pathname === user) {
+      setActiveSide("left");
+    } else if (router.pathname === seller) {
+      setActiveSide("right");
+    }
+  }, [router.pathname]);
+
+  const handleNavigation = (route) => {
+    if (route) {
+      router.push(route);
+    } else {
+      console.error("La ruta no está definida:", route);
+    }
+  };
 
   return (
     <Box
@@ -17,7 +36,10 @@ function ToggleLineButtons() {
       }}
     >
       <Button
-        onClick={() => setActiveSide("left")}
+        onClick={() => {
+          setActiveSide("left");
+          handleNavigation(user);
+        }}
         sx={{
           flex: 1,
           padding: "1rem",
@@ -31,7 +53,7 @@ function ToggleLineButtons() {
             left: 0,
             width: "100%",
             height: activeSide === "left" ? "3px" : "2px",
-            backgroundColor: activeSide === "left" ? "#FF7957" : "#F5F5F5",
+            backgroundColor: activeSide === "left" ? "#741C28" : "#F5F5F5",
             transition: "height 0.3s",
           },
           "&:hover": {
@@ -41,10 +63,14 @@ function ToggleLineButtons() {
         }}
         disableRipple
       >
-        Soy usuario
+        Soy un usuario
       </Button>
       <Button
-        onClick={() => setActiveSide("right")}
+        onClick={() => {
+          setActiveSide("right");
+
+          handleNavigation(seller);
+        }}
         sx={{
           flex: 1,
           padding: "1rem",
@@ -58,7 +84,7 @@ function ToggleLineButtons() {
             left: 0,
             width: "100%",
             height: activeSide === "right" ? "3px" : "2px",
-            backgroundColor: activeSide === "right" ? "#FF7957" : "#F5F5F5",
+            backgroundColor: activeSide === "right" ? "#741C28" : "#F5F5F5",
             transition: "height 0.3s",
           },
           "&:hover": {
@@ -68,7 +94,7 @@ function ToggleLineButtons() {
         }}
         disableRipple
       >
-        Soy negocio
+        Soy un negocio
       </Button>
     </Box>
   );

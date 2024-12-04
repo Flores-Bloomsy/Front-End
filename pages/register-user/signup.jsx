@@ -71,7 +71,11 @@ export default function Register() {
       sx={{
         width: "100%",
         maxWidth: "400px",
-        margin: "0 auto",
+        margin: "auto",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <Box
@@ -99,7 +103,7 @@ export default function Register() {
               whiteSpace: "normal",
             }}
           >
-            FloriApp!
+            Blooms&Bits
           </span>
         </Typography>
         <Typography
@@ -123,7 +127,17 @@ export default function Register() {
         </Typography>
       </Box>
       <Box
-        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: { sm: "white", xs: "transparent" },
+          width: { sm: "950px", xs: "100%" },
+          borderBottomLeftRadius: { sm: "16px", xs: "0" },
+          borderBottomRightRadius: { sm: "16px", xs: "0" },
+          borderTopLeftRadius: { sm: "16px", xs: "0" },
+          borderTopRightRadius: { sm: "16px", xs: "0" },
+        }}
       >
         <Box
           sx={{
@@ -158,10 +172,9 @@ export default function Register() {
             </Typography>
             <Box
               sx={{
-                width: "100%",
+                width: { sm: "380px", xs: "100%" },
                 height: "1px",
                 backgroundColor: "#CFD8DC",
-                marginY: "0,5rem",
               }}
             />
           </Box>
@@ -173,7 +186,10 @@ export default function Register() {
               margin: "0 auto",
             }}
           >
-            <ToggleLineButtons></ToggleLineButtons>
+            <ToggleLineButtons
+              user="/register-user/signup"
+              seller="/register-userSeller/signupSeller"
+            ></ToggleLineButtons>
           </Box>
           <Box
             sx={{
@@ -280,16 +296,16 @@ export default function Register() {
                   sx={{
                     width: "45%",
                     height: "1px",
-                    backgroundColor: "#FF7957",
+                    backgroundColor: "#741C28",
                     marginY: "0,5rem",
                   }}
                 />
-                <Box sx={{ color: "#FF7957" }}>0</Box>
+                <Box sx={{ color: "#741C28" }}>0</Box>
                 <Box
                   sx={{
                     width: "45%",
                     height: "1px",
-                    backgroundColor: "#FF7957",
+                    backgroundColor: "#741C28",
                     marginY: "0,5rem",
                   }}
                 />
@@ -312,11 +328,11 @@ export default function Register() {
                   }}
                 >
                   Al crear tu cuenta de usuario en FloriApp, aceptas los{" "}
-                  <span style={{ color: "#FF7957" }}>
+                  <span style={{ color: "#741C28" }}>
                     Términos y Condiciones
                   </span>{" "}
                   y
-                  <span style={{ color: "#FF7957" }}>
+                  <span style={{ color: "#741C28" }}>
                     el Aviso <br />
                     de privacidad
                   </span>
@@ -324,11 +340,11 @@ export default function Register() {
                 </Typography>
                 <Link href={"/register-user/login"}>
                   <Typography
-                    component="body1"
+                    component="p"
                     sx={{
                       fontFamily: theme.typography.fontFamily,
                       fontSize: 14,
-                      color: "#FF7957",
+                      color: "#741C28",
                       textDecoration: "none",
                     }}
                   >
@@ -340,7 +356,7 @@ export default function Register() {
           </Box>
         </Box>
         <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
-          <ImageContainer image="/flores-en-harron.jpg" />
+          <ImageContainer height={550} image="/flores-en-harron.jpg" />
         </Box>
       </Box>
     </Container>

@@ -7,11 +7,11 @@ import { Button, Typography, Container, Box } from "@mui/material";
 import InputField from "@/components/InputField";
 import { useTheme } from "@mui/material/styles";
 import ToggleLineButtons from "@/components/ToggleLineButtons";
-import { Login } from "../../utils/api";
+import { Signup } from "../../utils/api";
 import { useSnackbar } from "notistack";
 import ImageContainer from "@/components/ImageContainer";
 
-export default function HandleLogin() {
+export default function SellerRegister() {
   const theme = useTheme();
   const router = useRouter();
   const {
@@ -26,24 +26,42 @@ export default function HandleLogin() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const onSubmit = async (data) => {
+    console.log("data", data);
     try {
       setIsSubmitting(true);
       setErrorMessage("");
 
-      const response = await Login(data.email, data.password);
+      const response = await Signup(data.email, data.password);
 
       if (response) {
-        localStorage.setItem("Token", response);
-        router.push("/");
-      } else {
-        setErrorMessage("Credenciales incorrectas");
-        setIsSubmitting(false);
+        router.push("/register-user/login");
       }
     } catch (error) {
-      console.error("Error al iniciar sesión:", error);
-      setErrorMessage(
-        "Hubo un error al intentar iniciar sesión. Intenta nuevamente."
-      );
+      console.error("sign up Error:", error);
+
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        const message = error.response.data.message;
+        if (message === "User already exists") {
+          enqueueSnackbar("Este correo ya está registrado. Intenta con otro.", {
+            variant: "error",
+          });
+        } else {
+          enqueueSnackbar("Hubo un error. Intenta nuevamente.", {
+            variant: "error",
+          });
+        }
+      } else {
+        enqueueSnackbar("Este correo ya está registrado. Intenta con otro.", {
+          variant: "error",
+          style: {
+            backgroundColor: "#741C28",
+          },
+        });
+      }
       setIsSubmitting(false);
     }
   };
@@ -125,8 +143,6 @@ export default function HandleLogin() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: "400px",
-            height: "100%",
           }}
         >
           <Box
@@ -152,7 +168,9 @@ export default function HandleLogin() {
                 justifyContent: "center",
               }}
             >
-              Iniciar sesión
+              Registrate
+              <br />
+              como vendedor
             </Typography>
             <Box
               sx={{
@@ -171,8 +189,8 @@ export default function HandleLogin() {
             }}
           >
             <ToggleLineButtons
-              user="/register-user/login"
-              seller="/register-userSeller/loginSeller"
+              user="/register-user/signup"
+              seller="/register-userSeller/signupSeller"
             ></ToggleLineButtons>
           </Box>
           <Box
@@ -188,11 +206,7 @@ export default function HandleLogin() {
           >
             <form
               onSubmit={handleSubmit(onSubmit)}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "1rem",
-              }}
+              style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
             >
               <InputField
                 name="email"
@@ -231,6 +245,22 @@ export default function HandleLogin() {
                 }}
               />
 
+              <InputField
+                name="confirmPassword"
+                control={control}
+                label="Confirmar Password"
+                type="password"
+                errors={errors}
+                isSubmitted={isSubmitted}
+                rules={{
+                  required: {
+                    value: true,
+                    message: "Debes confirmar tu password",
+                  },
+                  validate: (value) =>
+                    value === watch("password") || "Los passwords no coinciden",
+                }}
+              />
               {errorMessage && (
                 <Typography
                   variant="body2"
@@ -254,19 +284,9 @@ export default function HandleLogin() {
                   borderBottomLeftRadius: "0",
                 }}
               >
-                {isSubmitting ? "Loading..." : "iniciar sesion"}
+                {isSubmitting ? "Registrando..." : "Registrarse"}
               </Button>
-              <Typography
-                variant="body1"
-                sx={{
-                  fontFamily: theme.typography.fontFamily,
-                  fontSize: 14,
-                  textAlign: "center",
-                  marginBottom: "15px",
-                }}
-              >
-                Publicar mi negocio en Blooms&Bits
-              </Typography>
+
               <Box
                 sx={{
                   display: "flex",
@@ -300,9 +320,29 @@ export default function HandleLogin() {
                   alignItems: "center",
                 }}
               >
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontFamily: theme.typography.fontFamily,
+                    fontSize: 14,
+                    textAlign: "center",
+                    marginBottom: "15px",
+                  }}
+                >
+                  Al crear tu cuenta de usuario en FloriApp, aceptas los{" "}
+                  <span style={{ color: "#741C28" }}>
+                    Términos y Condiciones
+                  </span>{" "}
+                  y
+                  <span style={{ color: "#741C28" }}>
+                    el Aviso <br />
+                    de privacidad
+                  </span>
+                  del servicio
+                </Typography>
                 <Link href={"/register-user/login"}>
                   <Typography
-                    component="p"
+                    component="body1"
                     sx={{
                       fontFamily: theme.typography.fontFamily,
                       fontSize: 14,
@@ -310,32 +350,15 @@ export default function HandleLogin() {
                       textDecoration: "none",
                     }}
                   >
-                    ¿Has olvidado tu contraseña?
-                  </Typography>
-                </Link>
-                <Link href={"../register-user/signup"}>
-                  <Typography
-                    component="p"
-                    sx={{
-                      fontFamily: theme.typography.fontFamily,
-                      fontSize: 14,
-                      color: "#741C28",
-                      textDecoration: "none",
-                    }}
-                  >
-                    Registrarse
+                    Inicia sesión
                   </Typography>
                 </Link>
               </Box>
             </form>
           </Box>
         </Box>
-        <Box
-          sx={{
-            display: { xs: "none", sm: "none", md: "block", height: "100%" },
-          }}
-        >
-          <ImageContainer height={500} image="/flores.vertical.jpg" />
+        <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
+          <ImageContainer height={550} image="/negocio-flores-shop.avif" />
         </Box>
       </Box>
     </Container>

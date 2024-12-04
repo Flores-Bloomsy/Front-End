@@ -19,14 +19,17 @@ export default function SectionOne() {
           gap: { xs: 3, md: 8 },
         }}
       >
-        <Typography sx={{ fontSize: "48px" }} variant="h1">
+        <Typography
+          sx={{ fontSize: { xs: "2rem", md: "2.25rem", lg: "3rem" } }}
+          variant="h1"
+        >
           Flores que
           <Typography
             variant="h1"
             component="span"
             color="tertiary"
             sx={{
-              fontSize: "48px",
+              fontSize: { xs: "2rem", md: "2.25rem", lg: "3rem" },
               lineHeight: 2,
               fontWeight: 600,
               fontStyle: "italic",
@@ -48,11 +51,10 @@ export default function SectionOne() {
           variant="contained"
           sx={{
             borderRadius: " 25px 0 25px 0",
-            p: 1.5,
+            padding: ".8rem 1.5rem",
             display: { xs: "none", md: "block" },
             width: "auto",
-            flexShrink: 0, // Evita que se reduzca
-            flexGrow: 0,
+            alignSelf: { xs: "center", md: "flex-start" },
           }}
         >
           Explora nuestras opciones
@@ -62,15 +64,18 @@ export default function SectionOne() {
         component="img"
         src="/img-main.webp"
         sx={{
-          flexBasis: { xs: "100%", sm: "30%", md: "50%" },
-          width: "50%",
+          width: { xs: "80%", sm: "60%", md: "50%" },
           height: "auto",
           maxWidth: "600px",
         }}
       />
       <Button
         variant="contained"
-        sx={{ borderRadius: " 25px 0 25px 0", p: 1.5, display: { md: "none" } }}
+        sx={{
+          borderRadius: " 25px 0 25px 0",
+          padding: ".8rem 1.5rem",
+          display: { md: "none" },
+        }}
       >
         Explora nuestras opciones
       </Button>

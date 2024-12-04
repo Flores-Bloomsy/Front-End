@@ -1,4 +1,4 @@
-import { Box, CardMedia, Container, Typography } from "@mui/material";
+import { Box, Button, CardMedia, Container, Typography } from "@mui/material";
 import Btn from "../Button";
 
 export default function SectionThree() {
@@ -33,8 +33,6 @@ export default function SectionThree() {
           display: "flex",
           flexDirection: "column",
           gap: 3,
-          width: "100%",
-          maxWidth: "100%",
           width: { xs: "100%", md: "55%", lg: "70" },
           maxWidth: { xs: "100%", md: "408px", lg: "500px" },
         }}
@@ -107,7 +105,17 @@ export default function SectionThree() {
           })}
         </Box>
 
-        <Btn text="Empieza tú búsqueda" />
+        <Button
+          variant="contained"
+          sx={{
+            borderRadius: " 25px 0 25px 0",
+            padding: ".8rem 1.5rem",
+            width: "auto",
+            alignSelf: { xs: "center", md: "flex-start" },
+          }}
+        >
+          Empieza tú búsqueda
+        </Button>
       </Box>
     </Container>
   );

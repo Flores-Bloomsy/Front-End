@@ -12,8 +12,22 @@ import FilterVintageIcon from "@mui/icons-material/FilterVintage";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import Link from "next/link";
 
-const pages = ["Catálogo", "Registrarse", "Iniciar Sesión"];
+const pages = [
+  {
+    page: "Catálogo",
+    link: "/",
+  },
+  {
+    page: "Registrarse",
+    link: "/register-user/signup",
+  },
+  {
+    page: "Iniciar Sesión",
+    link: "/register-user/login",
+  },
+];
 const iconNavBar = [SearchIcon, ShoppingCartOutlinedIcon];
 
 export default function ResponsiveNavBar() {
@@ -38,7 +52,11 @@ export default function ResponsiveNavBar() {
             }}
           >
             {pages.map((page) => {
-              return <Button key={page}>{page}</Button>;
+              return (
+                <Link href={page.link} key={page.page}>
+                  <Button>{page.page}</Button>
+                </Link>
+              );
             })}
           </Box>
 

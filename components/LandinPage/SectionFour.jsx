@@ -1,4 +1,10 @@
-import { Container, Grid2, Typography, useMediaQuery } from "@mui/material";
+import {
+  Button,
+  Container,
+  Grid2,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import InfoCard from "./InfoCard";
 
 export default function SectionFo() {
@@ -59,6 +65,16 @@ export default function SectionFo() {
           <InfoCard key={ocacion.text} img={ocacion.img} text={ocacion.text} />
         ))}
       </Grid2>
+      <Button
+        variant="contained"
+        sx={{
+          borderRadius: " 25px 0 25px 0",
+          padding: ".8rem 1.5rem",
+          display: { lg: "none" },
+        }}
+      >
+        Todos los productos
+      </Button>
     </Container>
   );
 }

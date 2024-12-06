@@ -7,12 +7,14 @@ import {
   Button,
   Badge,
   Container,
+  Avatar, //Usamos el contexto del usuario para mostrar la imagen de perfil y el nombre si esta logueado y los botones de 'iniciar sesion' y 'registrarse' si no lo estan.
 } from "@mui/material";
 import FilterVintageIcon from "@mui/icons-material/FilterVintage";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import Link from "next/link";
+import { useUser } from "../context/UserState"; //Estado del usuario
 
 const pages = [
   {
@@ -31,6 +33,8 @@ const pages = [
 const iconNavBar = [SearchIcon, ShoppingCartOutlinedIcon];
 
 export default function ResponsiveNavBar() {
+  const { user, login, logout } = useUser(); //Obtenemos el estado del usuario
+
   return (
     <AppBar
       position="static"
@@ -109,6 +113,36 @@ export default function ResponsiveNavBar() {
             fontSize="large"
             sx={{ display: { md: "none" } }}
           />
+
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              ml: 2,
+            }}
+          >
+            {user ? (
+              <>
+                <Avatar
+                  alt={user.name}
+                  src={user.profilePicture}
+                  sx={{ ml: 2 }}
+                />
+                <Button color="inherit" onClick={logout}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link href="/register-user/login">
+                  <Button color="inherit">Iniciar Sesión</Button>
+                </Link>
+                <Link href="/register-user/signup">
+                  <Button color="inherit">Registratse</Button>
+                </Link>
+              </>
+            )}
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

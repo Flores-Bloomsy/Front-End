@@ -1,8 +1,8 @@
-const API_URL = `http://localhost:8080/auth`;
+const API_URL = `http://localhost:8080`;
 
-export async function Signup(email, password) {
+export async function SignupUserSeller(email, password) {
   console.log("Datos enviados:", { email, password });
-  const response = await fetch(`${API_URL}/signup`, {
+  const response = await fetch(`${API_URL}/userseller`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -19,9 +19,9 @@ export async function Signup(email, password) {
   return data;
 }
 
-export async function Login(email, password) {
+export async function LoginUserSeller(email, password) {
   try {
-    const response = await fetch(`${API_URL}/login`, {
+    const response = await fetch(`${API_URL}/userseller/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,11 +36,12 @@ export async function Login(email, password) {
     }
 
     const data = await response.json();
+    console.log("respuesta del backend", data);
 
-    if (data.success && data.token) {
-      localStorage.setItem("Token", data.token);
+    if (data.success && data.data.toke) {
+      localStorage.setItem("Token", data.data.toke);
 
-      return data.token;
+      return data.data.toke;
     } else {
       throw new Error(data.message || "Unknown error");
     }

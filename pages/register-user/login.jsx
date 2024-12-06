@@ -36,14 +36,32 @@ export default function HandleLogin() {
         localStorage.setItem("Token", response);
         router.push("/");
       } else {
-        setErrorMessage("Credenciales incorrectas");
+        enqueueSnackbar("Credenciales incorrectas. Intenta nuevamente.", {
+          variant: "error",
+          style: {
+            backgroundColor: "#741C28",
+          },
+        });
         setIsSubmitting(false);
       }
     } catch (error) {
-      console.error("Error al iniciar sesión:", error);
-      setErrorMessage(
-        "Hubo un error al intentar iniciar sesión. Intenta nuevamente."
-      );
+      let errorMessage =
+        "Hubo un error al intentar iniciar sesión. Intenta nuevamente.";
+
+      if (error instanceof Error && error.message) {
+        const message = error.message;
+
+        if (message === "invalid credentials") {
+          errorMessage = "Correo electrónico o contraseña incorrectos.";
+        }
+      }
+
+      enqueueSnackbar(errorMessage, {
+        variant: "error",
+        style: {
+          backgroundColor: "#741C28",
+        },
+      });
       setIsSubmitting(false);
     }
   };
@@ -300,7 +318,7 @@ export default function HandleLogin() {
                   alignItems: "center",
                 }}
               >
-                <Link href={"/register-user/login"}>
+                <Link href={"#"}>
                   <Typography
                     component="p"
                     sx={{

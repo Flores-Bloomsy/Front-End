@@ -37,25 +37,29 @@ export default function Register() {
         router.push("/register-user/login");
       }
     } catch (error) {
-      console.error("sign up Error:", error);
+      let message;
 
       if (
         error.response &&
         error.response.data &&
         error.response.data.message
       ) {
-        const message = error.response.data.message;
-        if (message === "User already exists") {
-          enqueueSnackbar("Este correo ya está registrado. Intenta con otro.", {
-            variant: "error",
-          });
-        } else {
-          enqueueSnackbar("Hubo un error. Intenta nuevamente.", {
-            variant: "error",
-          });
-        }
+        message = error.response.data.message;
+      } else if (error.message) {
+        message = error.message.replace("Error: ", "");
       } else {
+        message = "Hubo un error desconocido";
+      }
+
+      if (message === "User already exists") {
         enqueueSnackbar("Este correo ya está registrado. Intenta con otro.", {
+          variant: "error",
+          style: {
+            backgroundColor: "#741C28",
+          },
+        });
+      } else {
+        enqueueSnackbar(message || "Hubo un error. Intenta nuevamente.", {
           variant: "error",
           style: {
             backgroundColor: "#741C28",

@@ -7,7 +7,7 @@ import { Button, Typography, Container, Box } from "@mui/material";
 import InputField from "@/components/InputField";
 import { useTheme } from "@mui/material/styles";
 import ToggleLineButtons from "@/components/ToggleLineButtons";
-import { Login } from "../../utils/api";
+import { LoginUserSeller } from "../../utils/apiSeller";
 import { useSnackbar } from "notistack";
 import ImageContainer from "@/components/ImageContainer";
 
@@ -30,20 +30,30 @@ export default function LoginSeller() {
       setIsSubmitting(true);
       setErrorMessage("");
 
-      const response = await Login(data.email, data.password);
+      const response = await LoginUserSeller(data.email, data.password);
 
-      if (response) {
-        localStorage.setItem("Token", response);
+      if (response.success) {
+        localStorage.setItem("Token", response.token);
         router.push("/");
       } else {
-        setErrorMessage("Credenciales incorrectas");
+        enqueueSnackbar("Correo electrónico o contraseña incorrecta", {
+          variant: "error",
+          style: {
+            backgroundColor: "#741C28",
+          },
+        });
         setIsSubmitting(false);
       }
     } catch (error) {
-      console.error("Error al iniciar sesión:", error);
-      setErrorMessage(
-        "Hubo un error al intentar iniciar sesión. Intenta nuevamente."
-      );
+      let errorMessage =
+        "Hubo un error al intentar iniciar sesión. Intenta nuevamente.";
+
+      enqueueSnackbar(errorMessage, {
+        variant: "error",
+        style: {
+          backgroundColor: "#741C28",
+        },
+      });
       setIsSubmitting(false);
     }
   };
@@ -301,7 +311,7 @@ export default function LoginSeller() {
                   alignItems: "center",
                 }}
               >
-                <Link href={"/register-user/login"}>
+                <Link href={"#"}>
                   <Typography
                     component="p"
                     sx={{

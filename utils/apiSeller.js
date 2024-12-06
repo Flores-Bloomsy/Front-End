@@ -29,24 +29,15 @@ export async function LoginUserSeller(email, password) {
       body: JSON.stringify({ email, password }),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error en el login:", errorData.message);
-      throw new Error(errorData.message || "Login failed");
-    }
-
     const data = await response.json();
-    console.log("respuesta del backend", data);
-
-    if (data.success && data.data.toke) {
-      localStorage.setItem("Token", data.data.toke);
-
-      return data.data.toke;
-    } else {
-      throw new Error(data.message || "Unknown error");
+    if (!response.ok) {
+      console.error("Error en el login:", data.message);
+      return { success: false, message: data.message || "Login failed" };
     }
+
+    return data;
   } catch (error) {
-    console.error("Error al realizar el login:", error);
+    console.error("Error al realizar el login:", error.message || error);
     throw error;
   }
 }

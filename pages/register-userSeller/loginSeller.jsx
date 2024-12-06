@@ -31,13 +31,12 @@ export default function LoginSeller() {
       setErrorMessage("");
 
       const response = await LoginUserSeller(data.email, data.password);
-      console.log("esta es la respuesta del backend", response);
 
-      if (response) {
-        localStorage.setItem("Token", response);
+      if (response.success) {
+        localStorage.setItem("Token", response.token);
         router.push("/");
       } else {
-        enqueueSnackbar("Credenciales incorrectas. Intenta nuevamente.", {
+        enqueueSnackbar("Correo electrónico o contraseña incorrecta", {
           variant: "error",
           style: {
             backgroundColor: "#741C28",
@@ -46,22 +45,8 @@ export default function LoginSeller() {
         setIsSubmitting(false);
       }
     } catch (error) {
-      console.error("Error al iniciar sesión:", error);
-
       let errorMessage =
         "Hubo un error al intentar iniciar sesión. Intenta nuevamente.";
-
-      if (error instanceof Error) {
-        const message = error.message;
-
-        if (message === "invalid credential") {
-          errorMessage = "Correo electrónico o contraseña incorrectos.";
-        } else if (message === "user logged in") {
-          errorMessage = "Ya has iniciado sesión en otro dispositivo.";
-        }
-
-        console.log("Detalles del error:", message); // Imprime detalles del error
-      }
 
       enqueueSnackbar(errorMessage, {
         variant: "error",

@@ -7,7 +7,7 @@ import { Button, Typography, Container, Box } from "@mui/material";
 import InputField from "@/components/InputField";
 import { useTheme } from "@mui/material/styles";
 import ToggleLineButtons from "@/components/ToggleLineButtons";
-import { Signup } from "../../utils/api";
+import { SignupUserSeller } from "../../utils/apiSeller";
 import { useSnackbar } from "notistack";
 import ImageContainer from "@/components/ImageContainer";
 
@@ -31,31 +31,35 @@ export default function SellerRegister() {
       setIsSubmitting(true);
       setErrorMessage("");
 
-      const response = await Signup(data.email, data.password);
+      const response = await SignupUserSeller(data.email, data.password);
 
       if (response) {
-        router.push("/register-user/login");
+        router.push("/register-userSeller/loginSeller");
       }
     } catch (error) {
-      console.error("sign up Error:", error);
+      let message;
 
       if (
         error.response &&
         error.response.data &&
         error.response.data.message
       ) {
-        const message = error.response.data.message;
-        if (message === "User already exists") {
-          enqueueSnackbar("Este correo ya está registrado. Intenta con otro.", {
-            variant: "error",
-          });
-        } else {
-          enqueueSnackbar("Hubo un error. Intenta nuevamente.", {
-            variant: "error",
-          });
-        }
+        message = error.response.data.message;
+      } else if (error.message) {
+        message = error.message.replace("Error: ", "");
       } else {
+        message = "Hubo un error desconocido";
+      }
+
+      if (message === "user already exists") {
         enqueueSnackbar("Este correo ya está registrado. Intenta con otro.", {
+          variant: "error",
+          style: {
+            backgroundColor: "#741C28",
+          },
+        });
+      } else {
+        enqueueSnackbar(message || "Hubo un error. Intenta nuevamente.", {
           variant: "error",
           style: {
             backgroundColor: "#741C28",

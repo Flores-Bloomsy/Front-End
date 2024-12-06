@@ -2,7 +2,7 @@ const API_URL = `http://localhost:8080/auth`;
 
 export async function Signup(email, password) {
   console.log("Datos enviados:", { email, password });
-  const response = await fetch(`http://localhost:8080/auth/signup`, {
+  const response = await fetch(`${API_URL}/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

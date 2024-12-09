@@ -14,6 +14,7 @@ import ImageContainer from "@/components/ImageContainer";
 export default function Register() {
   const theme = useTheme();
   const router = useRouter();
+
   const {
     handleSubmit,
     control,

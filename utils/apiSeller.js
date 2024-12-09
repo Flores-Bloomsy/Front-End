@@ -41,3 +41,57 @@ export async function LoginUserSeller(email, password) {
     throw error;
   }
 }
+
+export async function configProfile(dataUpdate, userId, userRole) {
+  try {
+    const token = localStorage.getItem("Token");
+
+    if (!token) throw new Error("no tienes autorizacion");
+
+    if (!dataUpdate || !userId)
+      throw new Error("faltan datos requeridos para actualizar el perfil");
+
+    const url =
+      userRole === "buyer"
+        ? `${API_URL}/auth/update/${userId}`
+        : `${API_URL}/userseller/update/${userId}`;
+
+    console.log(url);
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(dataUpdate),
+    });
+
+    const data = await response.json();
+    if (!data) throw new Error(data.message || `Error: ${response.status}`);
+    console.log(data);
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function getUserById(userId, userRole) {
+  console.log(userId, userRole);
+  try {
+    const url =
+      userRole === "buyer"
+        ? `${API_URL}/auth/${userId}`
+        : `${API_URL}/userseller/${userId}`;
+
+    console.log(url);
+
+    const response = await fetch(url);
+
+    const data = await response.json();
+    if (!data) throw new Error(data.message || `Error: ${response.status}`);
+
+    return data.data.user;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}

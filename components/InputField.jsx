@@ -10,7 +10,6 @@ const InputField = ({
   rules,
   label,
   type = "text",
-  bgColor = "F6F9FF",
 }) => {
   return (
     <Box>

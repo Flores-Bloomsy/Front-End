@@ -3,7 +3,7 @@ import theme from "../theme/index";
 import { CssBaseline } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import MainLayout from "@/layouts/MainLayout";
-import { UserProvider } from "../components/context/UserState";
+import { UserProvider } from "@/components/context/UserState";
 
 export default function App({ Component, pageProps }) {
   return (

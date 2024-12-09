@@ -2,13 +2,7 @@ import { Box, Container, Typography } from "@mui/material";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 
-export default function CardAddImg({ role }) {
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-    }
-  };
-
+export default function CardAddImg({ role, email, register, errors }) {
   return (
     <Container
       sx={{
@@ -35,7 +29,7 @@ export default function CardAddImg({ role }) {
           justifyContent: "center",
           position: "relative",
           cursor: "pointer",
-          border: "2px solid #fff",
+          border: `2px solid ${errors?.logo ? "red" : "#fff"}`,
           "&:hover": { backgroundColor: "rgba(114, 114, 114, 0.9)" },
         }}
       >
@@ -43,6 +37,7 @@ export default function CardAddImg({ role }) {
           accept="image/*"
           id="profile-image-upload"
           type="file"
+          {...register("logo")}
           style={{
             position: "absolute",
             width: "100%",
@@ -50,7 +45,7 @@ export default function CardAddImg({ role }) {
             opacity: 0,
             cursor: "pointer",
           }}
-          onChange={handleFileChange}
+          aria-label="Subir foto de perfil"
         />
 
         <PhotoCameraIcon sx={{ color: "#fff", fontSize: 30 }} />
@@ -75,9 +70,7 @@ export default function CardAddImg({ role }) {
           }}
         >
           <Typography fontWeight="bold">Correo</Typography>
-          <Typography sx={{ fontSize: ".8rem" }}>
-            speed_flores24@hotmail.com
-          </Typography>
+          <Typography sx={{ fontSize: ".8rem" }}>{email}</Typography>
         </Box>
         <Box
           sx={{

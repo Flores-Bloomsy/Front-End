@@ -10,10 +10,12 @@ import ToggleLineButtons from "@/components/ToggleLineButtons";
 import { Signup } from "../../utils/api";
 import { useSnackbar } from "notistack";
 import ImageContainer from "@/components/ImageContainer";
+import { useUser } from "../../components/context/UserState"; // Importa el contexto del usuario
 
 export default function Register() {
   const theme = useTheme();
   const router = useRouter();
+  const { login } = useUser(); // Obtiene la función login del contexto
   const {
     handleSubmit,
     control,
@@ -34,7 +36,9 @@ export default function Register() {
       const response = await Signup(data.email, data.password);
 
       if (response) {
-        router.push("/register-user/login");
+        login(response); // Actualiza el estado del usuario
+        // router.push("/register-user/login");
+        router.push("/"); // Redirige al usuario después de registrarse
       }
     } catch (error) {
       let message;

@@ -36,6 +36,7 @@ export default function HandleLogin() {
 
       if (response) {
         localStorage.setItem("Token", response);
+        login(response); // Actualizar el estado del usuario
         router.push("/");
       } else {
         enqueueSnackbar("Credenciales incorrectas. Intenta nuevamente.", {

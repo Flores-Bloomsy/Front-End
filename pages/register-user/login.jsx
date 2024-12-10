@@ -10,10 +10,12 @@ import ToggleLineButtons from "@/components/ToggleLineButtons";
 import { Login } from "../../utils/api";
 import { useSnackbar } from "notistack";
 import ImageContainer from "@/components/ImageContainer";
+import { useUser } from "../../components/context/UserState"; //Se importa el contexto
 
 export default function HandleLogin() {
   const theme = useTheme();
   const router = useRouter();
+  const { login } = useUser(); //Se obtiene la función login del contexto
   const {
     handleSubmit,
     control,

@@ -1,0 +1,15 @@
+const checkboxes = [
+  { label: "Cumpleaños", name: "birthday" },
+  { label: "Eventos", name: "events" },
+  { label: "Condolencias ", name: "Condolencias" },
+  { label: "Dia de las madres", name: "DiaDeLasMadres" },
+  { label: "Aniversarios", name: "Aniversarios" },
+  { label: "Nuevo Bebe", name: "nuevoBebe" },
+  { label: "Reconciliación", name: "Reconciliación" },
+  { label: "Agradecimiento", name: "Agradecimiento" },
+  { label: "Graduación", name: "Graduación" },
+  { label: "Dia de los muertos", name: "diaDeLosMertos" },
+  { label: "San Valentin", name: "sanValentin" },
+  { label: "Corporativo", name: "Corporativo" },
+  { label: "Boda", name: "boda" },
+];

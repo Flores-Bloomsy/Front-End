@@ -13,12 +13,14 @@ export const validationSchema = Yup.object({
     .typeError("la cantidad debe ser números"),
   ocacion: Yup.array()
     .min(1, "Debes seleccionar al menos una ocasión")
+    .max(3, "Solo puedes seleccionar hasta 3 opciones")
     .required("Es obligatorio seleccionar una opción"),
   Tamano: Yup.string()
     .oneOf(["Pequeño", "Mediano", "Grande"])
     .required("Tamaño es requerido"),
   color: Yup.array()
     .min(1, "Debes seleccionar al menos un color")
+    .max(3, "Solo puedes seleccionar hasta 3 opciones")
     .required("Es obligatorio seleccionar una opción"),
   estilo: Yup.string()
     .oneOf([
@@ -32,8 +34,10 @@ export const validationSchema = Yup.object({
     .required("Estilo es requerido"),
   floresYTipos: Yup.array()
     .min(1, "Debes seleccionar al menos un tipo de flor")
+    .max(3, "Solo puedes seleccionar hasta 3 opciones")
     .required("Es obligatorio seleccionar una opción"),
   personalida: Yup.array()
     .min(1, "Debes seleccionar al menos una personalidad")
+    .max(3, "Solo puedes seleccionar hasta 3 opciones")
     .required("Es obligatorio seleccionar una opción"),
 });

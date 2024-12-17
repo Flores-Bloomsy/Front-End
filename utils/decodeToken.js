@@ -8,6 +8,7 @@ export function decodeToken(token) {
     console.log(payloadJson);
     return payloadJson;
   } catch (error) {
-    return error;
+    console.error("Error al decodificar el token:", error);
+    return null;
   }
 }

@@ -8,6 +8,8 @@ import { validationSchema } from "@/utils/yupSchemaDelProducto";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createProduct } from "@/utils/apiProduct";
 import { useSnackbar } from "notistack";
+import { decodeToken } from "@/utils/decodeToken";
+import { useRouter } from "next/router";
 
 import {
   Box,
@@ -34,10 +36,11 @@ function AddProduct() {
   });
 
   const [image, setImage] = useState(null);
-  const [imageName, setImageName] = useState("");
   const [token, setToken] = useState(null);
+  const [imageName, setImageName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -48,14 +51,24 @@ function AddProduct() {
   };
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("Token");
-    if (storedToken) {
-      setToken(storedToken);
+    const token = localStorage.getItem("Token");
+    if (!token) {
+      router.push("/register-userSeller/loginSeller");
+      return;
     }
-  }, []);
+    setToken(token);
+
+    const decodedUser = decodeToken(token);
+
+    if (!decodedUser || decodedUser.rol !== "seller") {
+      router.push("/");
+      return;
+    }
+
+    console.log("Acceso permitido. Usuario autorizado:", decodedUser);
+  }, [router]);
 
   const onSubmit = async (data) => {
-    console.log("Datos enviados", data);
     if (!token) {
       console.error("Token no disponible");
       return;
@@ -92,17 +105,33 @@ function AddProduct() {
       setImageName("");
     } catch (error) {
       console.error("Error al enviar el producto", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleCheckboxChange = (groupName, option) => {
     const currentValue = watch(groupName) || [];
-    const updatedValue = currentValue.includes(option)
-      ? currentValue.filter((item) => item !== option)
-      : [...currentValue, option];
 
-    setValue(groupName, updatedValue);
+    if (currentValue.includes(option)) {
+      const updatedValue = currentValue.filter((item) => item !== option);
+      setValue(groupName, updatedValue);
+    } else {
+      if (currentValue.length >= 3) {
+        enqueueSnackbar("Solo se puede selecionar asta 3 opciones", {
+          variant: "error",
+          style: {
+            backgroundColor: "#D32F2F",
+          },
+        });
+        return;
+      }
+
+      const updatedValue = [...currentValue, option];
+      setValue(groupName, updatedValue);
+    }
   };
+
   const handleCancel = () => {
     reset();
   };

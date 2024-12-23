@@ -33,11 +33,12 @@ const iconNavBar = [SearchIcon, ShoppingCartOutlinedIcon];
 export default function ResponsiveNavBar() {
   return (
     <AppBar
-      position="static"
+      position="sticky"
       color="background"
       sx={{
-        boxShadow: "none",
+        boxShadow: 1,
         borderBottom: "none",
+        bgcolor: "background.default",
       }}
     >
       <Container maxWidth="lg">

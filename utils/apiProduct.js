@@ -1,4 +1,7 @@
-// api.js
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+console.log(API_URL);
+
 export const createProduct = async (data, token) => {
   try {
     // Estructura del body con los datos del formulario
@@ -45,3 +48,30 @@ export const createProduct = async (data, token) => {
     return { success: false, message: "Error en la conexión con el servidor." };
   }
 };
+
+export async function getAllProduct() {
+  try {
+    const response = await fetch(`${API_URL}/bouquet/get-bouquets`);
+
+    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+
+    const data = await response.json();
+
+    return data.data.allBouquets;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function getProductById(id) {
+  try {
+    const response = await fetch(`${API_URL}/bouquet/${id}`);
+
+    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+
+    const data = await response.json();
+    return data.data.getBouquetById;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}

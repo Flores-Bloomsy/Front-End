@@ -1,8 +1,23 @@
+import { useEffect } from "react";
+
+import { useFileUpload } from "@/hooks/useUploadImg";
 import { Box, Container, Typography } from "@mui/material";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 
-export default function CardAddImg({ role, email, register, errors }) {
+export default function CardAddImg({
+  role,
+  email,
+  register,
+  onImageUrlChange,
+}) {
+  const { isUploadingFile, imageUrl, onFileInputChange } = useFileUpload();
+
+  useEffect(() => {
+    if (imageUrl) {
+      onImageUrlChange(imageUrl);
+    }
+  }, [imageUrl, onImageUrlChange]);
   return (
     <Container
       sx={{
@@ -29,13 +44,16 @@ export default function CardAddImg({ role, email, register, errors }) {
           justifyContent: "center",
           position: "relative",
           cursor: "pointer",
-          border: `2px solid ${errors?.logo ? "red" : "#fff"}`,
+          border: `3px solid ${isUploadingFile ? "#FFB8A7" : "#fff"}`,
+          backgroundImage: imageUrl ? `url(${imageUrl})` : "none",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
           "&:hover": { backgroundColor: "rgba(114, 114, 114, 0.9)" },
         }}
       >
         <input
+          disabled={isUploadingFile}
           accept="image/*"
-          id="profile-image-upload"
           type="file"
           {...register("logo")}
           style={{
@@ -46,19 +64,45 @@ export default function CardAddImg({ role, email, register, errors }) {
             cursor: "pointer",
           }}
           aria-label="Subir foto de perfil"
+          onChange={onFileInputChange}
         />
-
-        <PhotoCameraIcon sx={{ color: "#fff", fontSize: 30 }} />
-        <Typography
-          sx={{
-            fontWeight: "bold",
-            textAlign: "center",
-            fontSize: 14,
-            color: "#fff",
-          }}
-        >
-          Actualizar foto de perfil
-        </Typography>
+        {isUploadingFile ? (
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              textAlign: "center",
+              fontSize: 14,
+              color: "#fff",
+            }}
+          >
+            Cargando...
+          </Typography>
+        ) : !imageUrl ? (
+          <>
+            <PhotoCameraIcon sx={{ color: "#fff", fontSize: 30 }} />
+            <Typography
+              sx={{
+                fontWeight: "bold",
+                textAlign: "center",
+                fontSize: 14,
+                color: "#fff",
+              }}
+            >
+              Actualizar foto de perfil
+            </Typography>
+          </>
+        ) : (
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              textAlign: "center",
+              fontSize: 14,
+              color: "#fff",
+            }}
+          >
+            Cambiar Foto
+          </Typography>
+        )}
       </Box>
       <Box sx={{ width: "100%", display: "grid", gap: 2 }}>
         <Box

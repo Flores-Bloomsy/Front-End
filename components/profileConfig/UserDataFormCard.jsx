@@ -1,10 +1,14 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import Link from "next/link";
 
 export default function UserDataFormCard({
   role,
   register,
   errors,
   isSubmitting,
+  textoButton,
+  textoTitulo,
+  linkTo,
 }) {
   return (
     <Container
@@ -20,7 +24,7 @@ export default function UserDataFormCard({
       }}
     >
       <Typography sx={{ width: "100%", textAlign: "left" }}>
-        ¡Bienvenido a Blooms&bits!
+        {textoTitulo}
       </Typography>
 
       {role === "seller" ? (
@@ -177,18 +181,37 @@ export default function UserDataFormCard({
         helperText={errors.addressPostalCode?.message}
       />
       <Box sx={{ width: "100%", textAlign: "right" }}>
-        <Button
-          variant="contained"
-          type="submit"
-          disabled={isSubmitting}
-          sx={{
-            borderRadius: " 25px 0 25px 0",
-            padding: ".8rem 1.5rem",
-            width: { xs: "100%", lg: "auto" },
-          }}
-        >
-          Completar Configuración
-        </Button>
+        {linkTo ? (
+          // Si 'linkTo' está definido, renderiza un enlace
+          <Link href={linkTo}>
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={isSubmitting}
+              sx={{
+                borderRadius: " 25px 0 25px 0",
+                padding: ".8rem 1.5rem",
+                width: { xs: "100%", lg: "auto" },
+              }}
+            >
+              {textoButton}
+            </Button>
+          </Link>
+        ) : (
+          // Si 'linkTo' no está presente, renderiza un botón normal
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={isSubmitting}
+            sx={{
+              borderRadius: " 25px 0 25px 0",
+              padding: ".8rem 1.5rem",
+              width: { xs: "100%", lg: "auto" },
+            }}
+          >
+            {textoButton}
+          </Button>
+        )}
       </Box>
     </Container>
   );

@@ -1,13 +1,27 @@
-const API_URL = `http://localhost:8080/auth`;
+const API_URL = `http://localhost:8080/`;
 
 export async function Signup(email, password) {
-  console.log("Datos enviados:", { email, password });
-  const response = await fetch(`${API_URL}/signup`, {
+  // Obtener el carrito desde el localStorage
+  let shoppingCart = JSON.parse(localStorage.getItem("cart"));
+
+  // Si no hay carrito o está vacío, asignamos un carrito vacío
+  if (!shoppingCart || !shoppingCart.items || shoppingCart.items.length === 0) {
+    shoppingCart = { items: [] }; // Asignamos un carrito vacío
+  } else {
+    // Si existe un carrito con productos, actualizamos los elementos
+    shoppingCart.items = shoppingCart.items.map((item) => ({
+      bouquetFlowerId: item.bouquetFlowerId,
+      quantity: item.quantity,
+    }));
+  }
+
+  // Enviar la solicitud de registro al servidor
+  const response = await fetch(`${API_URL}auth/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password, cart: shoppingCart }),
   });
 
   if (!response.ok) {
@@ -16,12 +30,15 @@ export async function Signup(email, password) {
   }
 
   const data = await response.json();
+
+  localStorage.removeItem("cart");
+
   return data;
 }
 
 export async function Login(email, password) {
   try {
-    const response = await fetch(`${API_URL}/login`, {
+    const response = await fetch(`${API_URL}auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

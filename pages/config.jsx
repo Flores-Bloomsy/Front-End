@@ -108,10 +108,12 @@ export default function Config() {
             email={user?.email}
           />
           <UserDataFormCard
+            textoTitulo={"Bienbenido a Bloom&Bits"}
             role={role}
             register={register}
             errors={errors}
             isSubmitting={isSubmitting}
+            textoButton={"enviar formulario"}
           />
         </Box>
       </form>

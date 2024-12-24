@@ -1,3 +1,5 @@
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 //traer los productos del cart
 export const fetchCartItems = async (setCartItems, setLoading) => {
   try {
@@ -149,3 +151,48 @@ export const handleRemove = async (id, setCartItems) => {
     console.error("Error en la eliminación:", error);
   }
 };
+
+export async function getShoppingCartById() {
+  const token = localStorage.getItem("Token");
+
+  if (!token) throw new Error("El usuario no está autenticado");
+
+  try {
+    const response = await fetch(`${API_URL}/cart/get-cart`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+export async function addProductToShoppingCart(product) {
+  const token = localStorage.getItem("Token");
+  if (!token) throw new Error("El usuario no está autenticado");
+
+  try {
+    const response = await fetch(`${API_URL}/cart/add-product`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(product),
+    });
+
+    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}

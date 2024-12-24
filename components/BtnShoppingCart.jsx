@@ -1,4 +1,4 @@
-import { addProductToShoppingCart } from "@/utils/api";
+import { addProductToShoppingCart } from "@/utils/apiCart";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { IconButton } from "@mui/material";
 import { useSnackbar } from "notistack";

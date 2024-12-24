@@ -9,7 +9,6 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import BtnShopingCart from "../BtnShoppingCart";
 
 export default function CardProduct({ props }) {

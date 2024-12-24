@@ -3,26 +3,31 @@ import { useState } from "react";
 import AsideFilter from "@/components/bouquets/AsideFilter";
 import CardProduct from "@/components/bouquets/CardProduct";
 import { getAllProduct } from "@/utils/apiProduct";
-import { Grid2, Container, Divider } from "@mui/material";
+import { Grid2, Container, Divider, Button, Drawer, Box } from "@mui/material";
 
 export default function Bouquets({ bouquets }) {
+  const [openFilter, setOpenFilter] = useState(false);
+  console.log(openFilter);
+
   const [filters, setFilters] = useState({
     rangoPrecio: { desde: "", hasta: "" },
-    occasion: null,
+    occasion: {},
     size: null,
     color: [],
     style: null,
     flowerType: [],
     personality: [],
   });
-
-  console.log("2", filters);
+  console.log(filters);
+  function toggleDrawer() {
+    setOpenFilter(!openFilter);
+  }
 
   function handleFilterChange(newFilters) {
     const cleanFilters = {
       ...filters,
       rangoPrecio: newFilters.rangoPrecio || { desde: "", hasta: "" },
-      occasion: newFilters.ocacion ?? null,
+      occasion: newFilters.ocacion ?? [],
       size: newFilters.Tamano ?? null,
       color: newFilters.color || [],
       style: newFilters.estilo ?? null,
@@ -32,7 +37,6 @@ export default function Bouquets({ bouquets }) {
 
     setFilters(cleanFilters);
   }
-
   const filteredBouquets = bouquets.filter((bouquet) => {
     const { desde, hasta } = filters.rangoPrecio || {};
 
@@ -69,24 +73,56 @@ export default function Bouquets({ bouquets }) {
 
     return true; // Solo pasa si cumple todas las condiciones
   });
-
   console.log(filteredBouquets);
+
   return (
-    <Container maxWidth="100%" sx={{ bgcolor: "white", minHeight: "87vh" }}>
+    <Container
+      maxWidth="100%"
+      sx={{ bgcolor: "white", minHeight: "87vh", py: 4 }}
+    >
+      <Button
+        onClick={toggleDrawer}
+        sx={{ display: { xs: "block", sm: "none" } }}
+      >
+        Fitros
+      </Button>
+
       <Container
         sx={{
           display: "flex",
           bgcolor: "white",
           gap: 3,
-          py: 4,
         }}
       >
-        <AsideFilter filters={filters} onFilterChange={handleFilterChange} />
+        <Drawer
+          sx={{
+            display: { sm: "none" },
+          }}
+          PaperProps={{
+            sx: {
+              width: "50%",
+              padding: "1rem",
+            },
+          }}
+          open={openFilter}
+          onClose={toggleDrawer}
+        >
+          <AsideFilter filters={filters} onFilterChange={handleFilterChange} />
+        </Drawer>
+        <Box
+          sx={{
+            minWidth: "25%",
+            width: "25%",
+            display: { xs: "none", sm: "block" },
+          }}
+        >
+          <AsideFilter filters={filters} onFilterChange={handleFilterChange} />
+        </Box>
         <Divider
           orientation="vertical"
           variant="middle"
           flexItem
-          sx={{ borderColor: "#741C28" }}
+          sx={{ borderColor: "#741C28", display: { xs: "none", sm: "flex" } }}
         />
         <Grid2
           container

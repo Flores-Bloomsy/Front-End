@@ -15,7 +15,7 @@ const icon = (
 );
 const checkedIcon = <CheckBoxIcon fontSize="small" sx={{ color: "#FF7957" }} />;
 
-const noMultipleKeys = ["Tamano", "ocacion", "estilo"];
+const noMultipleKeys = ["Tamano", "estilo"];
 
 export default function AsideFilter({ filters, onFilterChange }) {
   const handlePriceChange = (field, value) => {
@@ -30,8 +30,6 @@ export default function AsideFilter({ filters, onFilterChange }) {
   return (
     <Box
       sx={{
-        minWidth: "25%",
-        width: "25%",
         display: "flex",
         flexDirection: "column",
         gap: 1,
@@ -109,10 +107,10 @@ export default function AsideFilter({ filters, onFilterChange }) {
           slotProps={{
             chip: {
               sx: {
-                backgroundColor: "#741C28", // Fondo del chip
-                color: "#FFFFFF", // Texto del chip
+                backgroundColor: "#741C28",
+                color: "#FFFFFF",
                 "& .MuiChip-deleteIcon": {
-                  color: "#FFFFFF", // Color del ícono de eliminar
+                  color: "#FFFFFF",
                   "&:hover": {
                     color: "#FF7957",
                     backgroundColor: "#ffffff",

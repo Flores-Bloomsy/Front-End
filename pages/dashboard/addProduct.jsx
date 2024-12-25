@@ -10,6 +10,7 @@ import { createProduct } from "@/utils/apiProduct";
 import { useSnackbar } from "notistack";
 import { decodeToken } from "@/utils/decodeToken";
 import { useRouter } from "next/router";
+import { useFileUpload } from "@/hooks/useUploadImg";
 
 import {
   Box,
@@ -19,10 +20,12 @@ import {
   FormControlLabel,
   Checkbox,
   Divider,
-  Button,
 } from "@mui/material";
 
 function AddProduct() {
+  const { isUploadingFile, imageUrl, onFileInputChange, resetImageUrl } =
+    useFileUpload();
+
   const {
     register,
     handleSubmit,
@@ -41,14 +44,6 @@ function AddProduct() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImage(URL.createObjectURL(file));
-      setImageName(file.name);
-    }
-  };
 
   useEffect(() => {
     const token = localStorage.getItem("Token");
@@ -69,15 +64,17 @@ function AddProduct() {
   }, [router]);
 
   const onSubmit = async (data) => {
+    const dataSend = { ...data, images: [imageUrl] };
     if (!token) {
       console.error("Token no disponible");
       return;
     }
+    console.log(dataSend);
 
     setIsSubmitting(true);
 
     try {
-      const response = await createProduct(data, token);
+      const response = await createProduct(dataSend, token);
       console.log(response);
 
       if (response.success) {
@@ -89,8 +86,9 @@ function AddProduct() {
         });
 
         reset();
-        setImage(null);
-        setImageName("");
+        resetImageUrl();
+        // setImage(null);
+        // setImageName("");
       } else {
         enqueueSnackbar("Hubo un error al crear el producto", {
           variant: "error",
@@ -101,8 +99,9 @@ function AddProduct() {
       }
 
       reset();
-      setImage(null);
-      setImageName("");
+      resetImageUrl();
+      // setImage(null);
+      // setImageName("");
     } catch (error) {
       console.error("Error al enviar el producto", error);
     } finally {
@@ -147,7 +146,7 @@ function AddProduct() {
           mt: "15px",
         }}
       >
-        <Box sx={{}}>
+        <Box>
           <Box
             sx={{
               display: "flex",
@@ -223,7 +222,6 @@ function AddProduct() {
                   sx={{
                     fontWeight: "semibold",
                     fontFamily: "nunito, serif",
-                    mb: "10px",
                   }}
                 >
                   Nombre del producto
@@ -243,7 +241,6 @@ function AddProduct() {
                   sx={{
                     fontWeight: "semibold",
                     fontFamily: "nunito, serif",
-                    mb: "10px",
                   }}
                 >
                   Descripcion del producto
@@ -267,55 +264,101 @@ function AddProduct() {
                 >
                   Imagenes
                 </Typography>
-                <Box sx={{ padding: 1 }}>
-                  <TextField
-                    label="Cargar imagen"
-                    variant="outlined"
-                    fullWidth
-                    multiline
-                    rows={4}
-                    value={imageName}
-                    InputProps={{
-                      readOnly: true,
-                      endAdornment: (
-                        <Button
-                          component="label"
-                          variant="contained"
-                          color="primary"
-                        >
-                          Subir
-                          <input
-                            type="file"
-                            accept="image/*"
-                            hidden
-                            onChange={handleImageChange}
-                          />
-                        </Button>
-                      ),
+                <Box
+                  sx={{
+                    width: "100%",
+                    height: "10.5rem",
+                    borderRadius: "1rem",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                    cursor: "pointer",
+                    border: "2px dashed #000",
+                    backgroundImage: imageUrl ? `url(${imageUrl})` : "none",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    "&:hover": { backgroundColor: "rgba(114, 114, 114, 0.2)" },
+                  }}
+                >
+                  <input
+                    disabled={isUploadingFile}
+                    accept="image/*"
+                    type="file"
+                    style={{
+                      position: "absolute",
+                      width: "100%",
+                      height: "100%",
+                      opacity: 0,
+                      cursor: "pointer",
                     }}
+                    aria-label="Subir foto de perfil"
+                    onChange={onFileInputChange}
                   />
-
-                  {image && (
-                    <Box sx={{ mt: 2 }}>
-                      <Typography variant="body1">Vista previa:</Typography>
-                      <img
-                        src={image}
-                        alt="Vista previa"
-                        style={{
-                          width: "100%",
-                          maxHeight: "200px",
-                          objectFit: "cover",
+                  {isUploadingFile ? (
+                    <Typography
+                      sx={{
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        fontSize: 14,
+                        color: "primary.main",
+                      }}
+                    >
+                      Cargando...
+                    </Typography>
+                  ) : !imageUrl ? (
+                    <>
+                      <Typography
+                        sx={{
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          fontSize: 14,
+                          color: "primary.main",
+                          bgcolor: "#fff",
+                          border: 1,
+                          p: 1,
+                          borderRadius: 1,
                         }}
-                      />
-                    </Box>
+                      >
+                        Agregar Imagen
+                      </Typography>
+                    </>
+                  ) : (
+                    <Typography
+                      sx={{
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        fontSize: 14,
+                        color: "primary.main",
+                        bgcolor: "#fff",
+                        border: 1,
+                        p: 1,
+                        borderRadius: 1,
+                      }}
+                    >
+                      Cambiar Imagen
+                    </Typography>
                   )}
+                  {/* <Typography
+                    sx={{
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      fontSize: 14,
+                      color: "primary.main",
+                      border: 1,
+                      p: 1,
+                      borderRadius: 1,
+                    }}
+                  >
+                    Agregar Imagen
+                  </Typography> */}
                 </Box>
                 <Typography
                   variant="body1"
                   sx={{
                     fontWeight: "semibold",
                     fontFamily: "nunito, serif",
-                    mb: "10px",
                   }}
                 >
                   Precio
@@ -335,7 +378,6 @@ function AddProduct() {
                   sx={{
                     fontWeight: "semibold",
                     fontFamily: "nunito, serif",
-                    mt: "10px",
                   }}
                 >
                   Cantidad del producto

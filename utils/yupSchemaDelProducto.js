@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 
 export const validationSchema = Yup.object({
+  images: Yup.string().trim().url("Debe ser una URL válida."),
   nameProduct: Yup.string().required("El nombre del producto es obligatorio"),
   productDescription: Yup.string().required("La descripción es obligatoria"),
   productPrice: Yup.number()

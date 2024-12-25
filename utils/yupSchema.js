@@ -1,6 +1,7 @@
 import { object, string } from "yup";
 
 export const configProfileSchema = object({
+  profilePic: string().trim().url("Debe ser una URL válida."),
   phone: string()
     .trim()
     .matches(

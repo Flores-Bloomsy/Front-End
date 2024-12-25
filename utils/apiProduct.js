@@ -8,7 +8,7 @@ export const createProduct = async (data, token) => {
     const productData = {
       name: data.nameProduct,
       description: data.productDescription,
-      //images: data.productImages,
+      images: data.images,
       price: data.productPrice,
       stock: data.productQuantity,
       details: {
@@ -20,6 +20,7 @@ export const createProduct = async (data, token) => {
         personality: data.personalida,
       },
     };
+    console.log(productData);
 
     // Hacemos la solicitud POST al backend
     const response = await fetch(

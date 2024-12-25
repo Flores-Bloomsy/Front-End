@@ -5,12 +5,7 @@ import { Box, Container, Typography } from "@mui/material";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 
-export default function CardAddImg({
-  role,
-  email,
-  register,
-  onImageUrlChange,
-}) {
+export default function CardAddImg({ role, email, onImageUrlChange }) {
   const { isUploadingFile, imageUrl, onFileInputChange } = useFileUpload();
 
   useEffect(() => {
@@ -55,7 +50,6 @@ export default function CardAddImg({
           disabled={isUploadingFile}
           accept="image/*"
           type="file"
-          {...register("logo")}
           style={{
             position: "absolute",
             width: "100%",

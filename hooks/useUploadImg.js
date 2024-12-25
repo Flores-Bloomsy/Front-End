@@ -55,9 +55,14 @@ export function useFileUpload() {
     setUppy(uppyInstance); // Guardamos la instancia de uppy en el estado
   }, []);
 
+  function resetImageUrl() {
+    setImageUrl(null);
+  }
+
   return {
     isUploadingFile,
     imageUrl,
     onFileInputChange,
+    resetImageUrl,
   };
 }

@@ -1,4 +1,4 @@
-const API_URL = `http://localhost:8080`;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function SignupUserSeller(email, password) {
   console.log("Datos enviados:", { email, password });
@@ -43,6 +43,7 @@ export async function LoginUserSeller(email, password) {
 }
 
 export async function configProfile(dataUpdate, userId, userRole) {
+  console.log("api", dataUpdate);
   try {
     const token = localStorage.getItem("Token");
 
@@ -76,7 +77,6 @@ export async function configProfile(dataUpdate, userId, userRole) {
 }
 
 export async function getUserById(userId, userRole) {
-  console.log(userId, userRole);
   try {
     const url =
       userRole === "buyer"
@@ -93,5 +93,57 @@ export async function getUserById(userId, userRole) {
     return data.data.user;
   } catch (error) {
     throw new Error(error.message);
+  }
+}
+
+export async function getOrdersForSeller() {
+  const token = localStorage.getItem("Token");
+
+  if (!token) throw new Error("Unauthorized");
+
+  try {
+    const response = await fetch(`${API_URL}/order/orders-by-seller`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Something went wrong");
+    }
+
+    const data = await response.json();
+
+    return data.data;
+  } catch (error) {
+    throw new Error(error.message || "Something went wrong");
+  }
+}
+
+export async function getSellerProducts() {
+  const token = localStorage.getItem("Token");
+
+  if (!token) throw new Error("Unauthorized");
+
+  try {
+    const response = await fetch(`${API_URL}/bouquet/get-seller-bouquets`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Something went wrong");
+    }
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    throw new Error(error.message || "Something went wrong");
   }
 }

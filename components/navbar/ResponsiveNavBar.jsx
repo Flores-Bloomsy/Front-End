@@ -13,6 +13,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { decodeToken } from "@/utils/decodeToken";
+import { getUserById } from "@/utils/apiSeller";
 
 const pages = [
   {
@@ -28,9 +31,51 @@ const pages = [
     link: "/register-user/login",
   },
 ];
+
+const pagesUserBuyer = [
+  {
+    page: "catalogo",
+    link: "/bouquet",
+  },
+  {
+    page: "Encuentra el ramo perfecto",
+    link: "/bouquet",
+  },
+];
+
+const pagesUserSeller = [
+  {
+    page: "panel de Administrador",
+    link: "/dashboard",
+  },
+  {
+    page: "Crea un nuevo ramo",
+    link: "/dashboard/addProduct",
+  },
+];
 const iconNavBar = [SearchIcon, ShoppingCartOutlinedIcon];
 
 export default function ResponsiveNavBar() {
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
+
+  // console.log("user", user);
+
+  useEffect(() => {
+    const localToken = localStorage.getItem("Token");
+    if (!localToken) return;
+
+    const decodeUser = decodeToken(localToken);
+    console.log(decodeUser);
+
+    getUserById(decodeUser.id, decodeUser.rol)
+      .then((response) => setUser(response))
+      .catch((error) => setError(error));
+  }, []);
+  // console.log("usersss", user);
+
+  // let pageToRender = pages;
+  // console.log({ pageToRender });
   return (
     <AppBar
       position="sticky"

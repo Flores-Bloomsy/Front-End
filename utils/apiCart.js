@@ -23,13 +23,17 @@ export const fetchCartItems = async (setCartItems, setLoading) => {
 
     const data = await response.json();
     const items = data.data.items.map((item) => ({
+      storeName: "Nombre de la tienda",
+      sellerId: item.bouquetFlowerId.ownerId,
       name: item.bouquetFlowerId.name,
       image: item.bouquetFlowerId.images[0],
       price: item.bouquetFlowerId.price,
       quantity: item.quantity,
+      totalPrice: item.bouquetFlowerId.price * item.quantity,
       bouquetFlowerId: item.bouquetFlowerId._id,
+      shippingStatus: "pending",
     }));
-    console.log("data URL:", data);
+    //console.log("data URL:", data);
     setCartItems(items);
   } catch (error) {
     console.error("Error fetching cart items:", error);
@@ -38,8 +42,7 @@ export const fetchCartItems = async (setCartItems, setLoading) => {
   }
 };
 
-// src/utils/cartActions.js
-
+//incrmentar el producto del carrito
 export const handleIncrement = async (itemId, cartItems, setCartItems) => {
   const token = localStorage.getItem("Token");
   console.log("itemId enviado:", itemId);
@@ -84,6 +87,7 @@ export const handleIncrement = async (itemId, cartItems, setCartItems) => {
   }
 };
 
+// decrementar el producto del carrito
 export const handleDecrement = async (itemId, cartItems, setCartItems) => {
   const token = localStorage.getItem("Token");
 
@@ -124,6 +128,7 @@ export const handleDecrement = async (itemId, cartItems, setCartItems) => {
   }
 };
 
+// eliminar producto del carrito
 export const handleRemove = async (id, setCartItems) => {
   const token = localStorage.getItem("Token");
   try {

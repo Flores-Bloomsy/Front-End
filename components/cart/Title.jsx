@@ -8,7 +8,10 @@ function Title({ title, subtitle, sx }) {
         variant="h1"
         sx={{
           fontFamily: "Lora, serif",
-          fontSize: "2.25rem",
+          fontSize: {
+            xs: "1.50rem",
+            md: "2.25rem",
+          },
           fontWeight: 600,
           my: "1rem",
         }}

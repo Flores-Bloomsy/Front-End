@@ -1,5 +1,6 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function UserDataFormCard({
   role,
@@ -9,7 +10,10 @@ export default function UserDataFormCard({
   textoButton,
   textoTitulo,
   linkTo,
+  onSubmitHandler,
 }) {
+  const router = useRouter();
+  const { pathname } = router;
   return (
     <Container
       sx={{
@@ -170,7 +174,18 @@ export default function UserDataFormCard({
           error={!!errors.addressState}
           helperText={errors.addressState?.message}
         />
+        {pathname === "/checkout/address" && (
+          <TextField
+            {...register("country")}
+            label="país"
+            variant="outlined"
+            fullWidth
+            error={!!errors.country}
+            helperText={errors.country?.message}
+          />
+        )}
       </Box>
+
       <TextField
         {...register("addressPostalCode")}
         label="Código Postal"
@@ -203,6 +218,7 @@ export default function UserDataFormCard({
             variant="contained"
             type="submit"
             disabled={isSubmitting}
+            onClick={onSubmitHandler}
             sx={{
               borderRadius: " 25px 0 25px 0",
               padding: ".8rem 1.5rem",

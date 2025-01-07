@@ -7,6 +7,8 @@ import {
   Button,
   Badge,
   Container,
+  Avatar,
+  IconButton,
 } from "@mui/material";
 import FilterVintageIcon from "@mui/icons-material/FilterVintage";
 import SearchIcon from "@mui/icons-material/Search";
@@ -16,6 +18,7 @@ import Link from "next/link";
 import { decodeToken } from "@/utils/decodeToken";
 import { getUserById } from "@/utils/apiSeller";
 import { useEffect, useState } from "react";
+import MenuProfile from "./MenuProfile";
 
 const pages = [
   {
@@ -56,9 +59,25 @@ const pagesUserSeller = [
 const iconNavBar = [SearchIcon, ShoppingCartOutlinedIcon];
 
 export default function ResponsiveNavBar() {
+  const [anchorEl, setAnchorEl] = useState(null);
   const [user, setUser] = useState(null);
-  const [error, setError] = useState(null);
+  const open = Boolean(anchorEl);
+  let pageToRender = pages;
   console.log(user);
+
+  function handleClick(event) {
+    setAnchorEl(event.currentTarget);
+  }
+
+  function handleClose() {
+    setAnchorEl(null);
+  }
+  function handleLogout() {
+    localStorage.removeItem("Token");
+    localStorage.removeItem(`user_${user._id}_${user.rol}`);
+
+    setUser(null);
+  }
 
   useEffect(() => {
     const localToken = localStorage.getItem("Token");
@@ -68,9 +87,8 @@ export default function ResponsiveNavBar() {
 
     getUserById(decodeUser.id, decodeUser.rol)
       .then((response) => setUser(response))
-      .catch((error) => setError(error));
+      .catch((error) => console.log(error));
   }, []);
-  let pageToRender = pages;
 
   pageToRender =
     user?.rol === "seller"
@@ -118,18 +136,36 @@ export default function ResponsiveNavBar() {
             }}
           >
             {iconNavBar.map((Icon, index) => (
-              <Badge
-                badgeContent={0}
+              <IconButton
                 key={index}
                 sx={{
                   backgroundColor: "secondary.main",
-                  borderRadius: "50%",
-                  padding: "5px",
+                  "&:hover": {
+                    backgroundColor: "tertiary.main",
+                  },
                 }}
               >
                 <Icon color="primary" />
-              </Badge>
+              </IconButton>
             ))}
+            {user && (
+              <IconButton sx={{ p: 0 }}>
+                <Avatar
+                  src={user?.profilePic || undefined}
+                  alt={user?.email}
+                  onClick={handleClick}
+                  sx={{
+                    backgroundColor: "secondary.main",
+                    color: "text.primary",
+                    "&:hover": {
+                      backgroundColor: "tertiary.main",
+                    },
+                  }}
+                >
+                  {user?.email?.charAt(0).toUpperCase()}{" "}
+                </Avatar>
+              </IconButton>
+            )}
           </Box>
 
           <TextField
@@ -153,6 +189,7 @@ export default function ResponsiveNavBar() {
               ),
             }}
           />
+
           <MenuIcon
             color="primary"
             fontSize="large"
@@ -160,6 +197,14 @@ export default function ResponsiveNavBar() {
           />
         </Toolbar>
       </Container>
+      <MenuProfile
+        open={open}
+        user={user}
+        handleClose={handleClose}
+        anchorEl={anchorEl}
+        onLogout={handleLogout}
+        pagesToRender={pageToRender}
+      />
     </AppBar>
   );
 }

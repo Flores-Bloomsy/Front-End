@@ -8,20 +8,74 @@ import {
 } from "@mui/material";
 
 import Title from "@/components/cart/Title";
+import { useShipping } from "@/context/shippingContext";
 
 import theme from "@/theme";
 import Link from "next/link";
 import Image from "next/image";
+import clsx from "clsx";
+import { fetchCartItems } from "@/utils/apiCart";
+import { useEffect, useState } from "react";
+import { placeOrder } from "@/utils/apiPlaceOrder";
+import { useRouter } from "next/router";
 
-const productInCart = [
-  "/Flower-shops-signup.jpg",
-  "/inventory-in-flower-shop.jpg",
-  "/negocio-flores-shop.avif",
-];
+function OrderCheckout() {
+  const [cartItems, setCartItems] = useState([]);
 
-function page() {
-  const handleIncrement = () => console.log("Agregar producto");
-  const handleDecrement = () => console.log("Quitar producto");
+  const [loading, setLoading] = useState(true);
+  const [isPlaceOrder, setIsPlaceOrder] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { shippingInfo } = useShipping();
+  const router = useRouter();
+
+  useEffect(() => {
+    fetchCartItems(setCartItems, setLoading);
+  }, []);
+
+  const getOrderSummary = () => {
+    let totalQuantity = 0;
+    let totalPrice = 0;
+
+    cartItems.forEach((item) => {
+      totalQuantity += item.quantity; // Sumar la cantidad de productos
+      totalPrice += item.price * item.quantity; // Sumar el total en dinero (precio * cantidad)
+    });
+
+    return { totalQuantity, totalPrice };
+  };
+
+  const { totalQuantity, totalPrice } = getOrderSummary();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  //limpiar el carrito
+  const clearCartItems = () => {
+    setCartItems([]); // Limpia el estado de `cartItems`
+    localStorage.removeItem("cart"); // Si también estás utilizando localStorage
+  };
+
+  const onPlaceOrder = async () => {
+    const resp = await placeOrder(shippingInfo, cartItems);
+
+    if (!resp.ok) {
+      setIsPlaceOrder(false);
+      setErrorMessage(resp.message);
+      return;
+    }
+    clearCartItems();
+
+    // Redirige usando el número de orden
+    const orderNumber = resp.data.data._id;
+    console.log("soy resp", orderNumber); // Verifica qué contiene `resp`
+    if (orderNumber) {
+      router.push(`/orders/${orderNumber}`);
+    } else {
+      console.error("No se encontró el número de orden en la respuesta.");
+    }
+  };
+
   return (
     <Container
       sx={{
@@ -29,7 +83,10 @@ function page() {
         justifyContent: "center",
         alignItems: "center",
         mb: "10px",
-        px: "10px",
+        mt: "20px",
+        bgcolor: "white",
+        borderRadius: "15px",
+        pb: "30px",
       }}
     >
       <Box
@@ -65,7 +122,7 @@ function page() {
             </Box>
             {/**Items */}
 
-            {productInCart.map((src, index) => (
+            {cartItems.map((item, index) => (
               <Box
                 key={index}
                 sx={{
@@ -75,8 +132,8 @@ function page() {
                 }}
               >
                 <Image
-                  src={src}
-                  alt={`Image ${index + 1}`}
+                  src={item.image}
+                  alt={item.name}
                   width={150}
                   height={150}
                   style={{
@@ -95,25 +152,31 @@ function page() {
                 >
                   <Box
                     component="span"
-                    sx={{ fontFamily: theme.typography.fontFamily }}
+                    sx={{
+                      fontFamily: theme.typography.fontFamily,
+                      fontSize: "1.25rem",
+                    }}
                   >
-                    Titulo del producto
+                    {item.name}
                   </Box>
                   <Box
                     component="span"
                     sx={{ fontFamily: theme.typography.fontFamily }}
                   >
-                    precio del producuto
+                    cantidad del producto{" "}
+                    <span style={{ fontSize: "1.10rem" }}>
+                      {`(${item.quantity})`}
+                    </span>
                   </Box>
                   <Box
                     component="span"
                     sx={{
                       fontFamily: theme.typography.fontFamily,
-
-                      fontSize: "1.25rem",
                     }}
                   >
-                    SUbtotal: $2050
+                    <span
+                      style={{ fontSize: "1.05rem", fontWeight: "bold" }}
+                    >{`$${item.price * item.quantity}`}</span>
                   </Box>
 
                   <Box></Box>
@@ -149,13 +212,15 @@ function page() {
                 >
                   Direccion de entrega
                 </Typography>
-                <Box component="span">Fernando Herrera</Box>
-                <Box component="span">Av. Siempre vivas</Box>
-                <Box component="span">Col. Centro</Box>
-                <Box component="span">Alcaldia de chipalsingo</Box>
-                <Box component="span">Ciuda de Mexico</Box>
-                <Box component="span">CP 1234567</Box>
-                <Box component="span">123.123.123</Box>
+                <Box component="span">
+                  {shippingInfo.name} {shippingInfo.lastName}
+                </Box>
+                <Box component="span">{shippingInfo.street}</Box>
+                <Box component="span">{shippingInfo.city}</Box>
+                <Box component="span">{shippingInfo.state}</Box>
+                <Box component="span">{shippingInfo.postalCode}</Box>
+                <Box component="span">{`casa: #${shippingInfo.number}`}</Box>
+                <Box component="span">{shippingInfo.phone}</Box>
                 <Divider sx={{ margin: "20px 0" }} />
               </Box>
               <Typography
@@ -173,7 +238,7 @@ function page() {
                 <Grid item sx={6}>
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Box component="span">No. Productos</Box>
-                    <Box component="span">Subtotal</Box>
+                    <Box component="span">$subtotal</Box>
                     <Box
                       component="span"
                       sx={{ fontFamily: "Lora, serif", fontSize: "1.25rem" }}
@@ -191,19 +256,20 @@ function page() {
                       mb: "10px",
                     }}
                   >
-                    <Box component="span">3 articulos</Box>
-                    <Box component="span">$ 100</Box>
+                    <Box component="span">{totalQuantity} articulos</Box>
+                    <Box component="span">$ {totalPrice.toFixed(2)}</Box>
                     <Box
                       component="span"
                       sx={{ fontFamily: "Lora, serif", fontSize: "1.25rem" }}
                     >
-                      $ 100
+                      {totalPrice.toFixed(2)}
                     </Box>
                   </Box>
                 </Grid>
               </Grid>
+
               <Typography component="span" sx={{ fontSize: "0.80rem" }}>
-                Al hacer clic en "Colocar orden" aceptas nuestras{" "}
+                Al hacer clic en Colocar orden aceptas nuestras{" "}
                 <a href="#" sx={{ textDecoration: "underline" }}>
                   {" "}
                   politicas de privacidad
@@ -214,11 +280,17 @@ function page() {
                   terminos y condiciones
                 </a>
               </Typography>
-              <Link href="/orders/123">
+              <Box>
+                <Box component="span" sx={{ color: "red" }}>
+                  {errorMessage}
+                </Box>
+
                 <Button
                   type="submit"
                   variant="contained"
                   color="primary"
+                  onClick={!isPlaceOrder ? onPlaceOrder : undefined} // Desactiva el click cuando está deshabilitado
+                  disabled={isPlaceOrder} // Propiedad para cambiar estado
                   style={{ marginTop: "1rem" }}
                   sx={{
                     width: "100%",
@@ -228,9 +300,9 @@ function page() {
                     borderBottomLeftRadius: "0",
                   }}
                 >
-                  Colocar orden
+                  {isPlaceOrder ? "Orden enviada" : "Colocar orden"}
                 </Button>
-              </Link>
+              </Box>
             </Box>
           </Grid>
         </Grid>
@@ -239,4 +311,4 @@ function page() {
   );
 }
 
-export default page;
+export default OrderCheckout;

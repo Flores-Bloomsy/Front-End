@@ -28,6 +28,8 @@ function CartPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  console.log("cart", cartItems);
+
   const checkCartEmpty = () => {
     if (cartItems.length === 0) {
       router.push("/empty"); // Redirige si el carrito está vacío
@@ -93,6 +95,7 @@ function CartPage() {
         justifyContent: "center",
         alignItems: "center",
         mb: "10px",
+        mt: "20px",
         px: "10px",
         bgcolor: "white",
         borderRadius: "15px",
@@ -122,7 +125,7 @@ function CartPage() {
                 Agregar mas items
               </Box>
               <Link
-                href="/"
+                href="/bouquet"
                 passHref
                 sx={{ textDecoration: "none", mb: "1.5rem" }}
               >

@@ -1,7 +1,5 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-console.log(API_URL);
-
 export const createProduct = async (data, token) => {
   try {
     // Estructura del body con los datos del formulario

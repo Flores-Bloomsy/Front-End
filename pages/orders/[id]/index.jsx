@@ -8,25 +8,54 @@ import {
 } from "@mui/material";
 
 import Title from "@/components/cart/Title";
-import WalletOutlinedIcon from "@mui/icons-material/WalletOutlined";
+import PaypalButton from "@/components/paypal/PaypalButton";
+import OrderStatus from "@/components/paypal/orderStatus";
+
 import { useRouter } from "next/router";
-import clsx from "clsx";
 
 import theme from "@/theme";
-import Link from "next/link";
+
 import Image from "next/image";
 
-const productInCart = [
-  "/Flower-shops-signup.jpg",
-  "/inventory-in-flower-shop.jpg",
-  "/negocio-flores-shop.avif",
-];
+import { getLatestOrder } from "@/utils/apiPlaceOrder";
+import { useEffect, useState } from "react";
 
-function Page() {
+function PayOrder() {
   const router = useRouter();
   const { id } = router.query;
-  const handleIncrement = () => console.log("Agregar producto");
-  const handleDecrement = () => console.log("Quitar producto");
+
+  const [latestOrder, setLatestOrder] = useState(null);
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      const order = await getLatestOrder(id);
+
+      setLatestOrder(order);
+    };
+
+    fetchOrder();
+  }, [id]);
+
+  if (!latestOrder) {
+    return <p>Cargando la última orden...</p>;
+  }
+
+  // console.log("ultima orden", latestOrder);
+
+  const getOrderSummary = () => {
+    let totalQuantity = 0;
+    let totalPrice = 0;
+
+    latestOrder.products.forEach((item) => {
+      totalQuantity += item.quantity;
+      totalPrice += item.price * item.quantity;
+    });
+
+    return { totalQuantity, totalPrice };
+  };
+
+  const { totalQuantity, totalPrice } = getOrderSummary();
+
   return (
     <Container
       sx={{
@@ -35,6 +64,10 @@ function Page() {
         alignItems: "center",
         mb: "10px",
         px: "10px",
+        mt: "20px",
+        bgcolor: "white",
+        borderRadius: "15px",
+        pb: "30px",
       }}
     >
       <Box
@@ -44,38 +77,16 @@ function Page() {
           width: "1000px",
         }}
       >
-        <Title title={`Orden #${id}`} />
+        <Title title={`Orden # ${id}`} />
 
         <Divider sx={{ margin: "5px 0 20px 0", bgcolor: "#741C28" }} />
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             {/**carrito */}
-            <Button
-              sx={{
-                display: "flex",
-                color: "white",
-                bgcolor: "green",
-                justifyContent: "start",
-                alignItems: "center",
-                width: "100%",
-                py: "10px",
-                px: "10px",
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "end",
-                  alignItems: "center",
-                }}
-              >
-                <WalletOutlinedIcon sx={{ mr: 1 }} />
-                pagada
-              </Box>
-            </Button>
+            <OrderStatus paymentStatus={latestOrder.paymentStatus ?? false} />
             {/**Items */}
 
-            {productInCart.map((src, index) => (
+            {latestOrder.products.map((item, index) => (
               <Box
                 key={index}
                 sx={{
@@ -85,8 +96,8 @@ function Page() {
                 }}
               >
                 <Image
-                  src={src}
-                  alt={`Image ${index + 1}`}
+                  src={item.image}
+                  alt={item.name}
                   width={150}
                   height={150}
                   style={{
@@ -105,25 +116,31 @@ function Page() {
                 >
                   <Box
                     component="span"
-                    sx={{ fontFamily: theme.typography.fontFamily }}
+                    sx={{
+                      fontFamily: theme.typography.fontFamily,
+                      fontSize: "1.25rem",
+                    }}
                   >
-                    Titulo del producto
+                    {item.name}
                   </Box>
                   <Box
                     component="span"
                     sx={{ fontFamily: theme.typography.fontFamily }}
                   >
-                    precio del producuto
+                    cantidad del producto{" "}
+                    <span style={{ fontSize: "1.10rem" }}>
+                      {`(${item.quantity})`}
+                    </span>
                   </Box>
                   <Box
                     component="span"
                     sx={{
                       fontFamily: theme.typography.fontFamily,
-
-                      fontSize: "1.25rem",
                     }}
                   >
-                    SUbtotal: $2050
+                    <span
+                      style={{ fontSize: "1.05rem", fontWeight: "bold" }}
+                    >{`$${item.totalPrice}`}</span>
                   </Box>
 
                   <Box></Box>
@@ -159,13 +176,17 @@ function Page() {
                 >
                   Direccion de entrega
                 </Typography>
-                <Box component="span">Fernando Herrera</Box>
-                <Box component="span">Av. Siempre vivas</Box>
-                <Box component="span">Col. Centro</Box>
-                <Box component="span">Alcaldia de chipalsingo</Box>
-                <Box component="span">Ciuda de Mexico</Box>
-                <Box component="span">CP 1234567</Box>
-                <Box component="span">123.123.123</Box>
+
+                <Box component="span">{latestOrder.shippingAddress.city}</Box>
+                <Box component="span">
+                  {latestOrder.shippingAddress.country}
+                </Box>
+                <Box component="span">{`casa; #${latestOrder.shippingAddress.number}`}</Box>
+                <Box component="span">
+                  {latestOrder.shippingAddress.postalCode}
+                </Box>
+                <Box component="span">{latestOrder.shippingAddress.street}</Box>
+
                 <Divider sx={{ margin: "20px 0" }} />
               </Box>
               <Typography
@@ -178,9 +199,8 @@ function Page() {
               >
                 Resumen de orden
               </Typography>
-
               <Grid container item spacing={2}>
-                <Grid item sx={6}>
+                <Grid item xs={6}>
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Box component="span">No. Productos</Box>
                     <Box component="span">Subtotal</Box>
@@ -201,41 +221,29 @@ function Page() {
                       mb: "10px",
                     }}
                   >
-                    <Box component="span">3 articulos</Box>
-                    <Box component="span">$ 100</Box>
+                    <Box component="span">{totalQuantity} articulos</Box>
+                    <Box component="span">$ {totalPrice.toFixed(2)}</Box>
                     <Box
                       component="span"
                       sx={{ fontFamily: "Lora, serif", fontSize: "1.25rem" }}
                     >
-                      $ 100
+                      {`$${totalPrice.toFixed(2)}`}
                     </Box>
                   </Box>
                 </Grid>
               </Grid>
-
-              <Button
-                sx={{
-                  display: "flex",
-                  color: "white",
-                  bgcolor: "green",
-                  justifyContent: "start",
-                  alignItems: "center",
-                  width: "100%",
-                  py: "10px",
-                  px: "10px",
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "end",
-                    alignItems: "center",
-                  }}
-                >
-                  <WalletOutlinedIcon sx={{ mr: 1 }} />
-                  pagada
-                </Box>
-              </Button>
+              {latestOrder.paymentStatus === "COMPLETED" ? (
+                <OrderStatus
+                  paymentStatus={latestOrder.paymentStatus ?? false}
+                />
+              ) : (
+                <PaypalButton
+                  customerId={latestOrder.customerId}
+                  products={latestOrder.products}
+                  orderNumber={latestOrder.orderNumber}
+                  orderId={id}
+                />
+              )}
             </Box>
           </Grid>
         </Grid>
@@ -244,4 +252,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default PayOrder;

@@ -64,7 +64,7 @@ export async function getAllProduct() {
 
 export async function getProductById(id) {
   try {
-    const response = await fetch(`${API_URL}/bouquet/${id}`);
+    const response = await fetch(`${API_URL}/bouquet/get-bouquet-by-id/${id}`);
 
     if (!response.ok) throw new Error(`Error: ${response.statusText}`);
 
@@ -72,5 +72,83 @@ export async function getProductById(id) {
     return data.data.getBouquetById;
   } catch (error) {
     throw new Error(error.message);
+  }
+}
+
+export async function getSellerProducts() {
+  const token = localStorage.getItem("Token");
+
+  if (!token) throw new Error("Unauthorized");
+
+  try {
+    const response = await fetch(`${API_URL}/bouquet/get-seller-bouquets`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Something went wrong");
+    }
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    throw new Error(error.message || "Something went wrong");
+  }
+}
+
+export async function deleteProductById(productId) {
+  const token = localStorage.getItem("Token");
+
+  if (!token) throw new Error("Unauthorized");
+
+  try {
+    const response = await fetch(`${API_URL}/bouquet/delete/${productId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Something went wrong");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message || "Something went wrong");
+  }
+}
+
+export async function updateProductById(productId, data) {
+  const token = localStorage.getItem("Token");
+
+  if (!token) throw new Error("Unauthorized");
+
+  try {
+    const response = await fetch(`${API_URL}/bouquet/update/${productId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Something went wrong");
+    }
+
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw new Error(error.message || "Something went wrong");
   }
 }

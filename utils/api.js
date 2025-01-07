@@ -66,3 +66,30 @@ export async function Login(email, password) {
     throw error;
   }
 }
+
+export async function getOrdersByUser() {
+  const token = localStorage.getItem("Token");
+
+  try {
+    if (!token) throw new Error("Unauthorized");
+
+    const response = await fetch(`${API_URL}order/orders-by-buyer`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Something went wrong");
+    }
+
+    const data = await response.json();
+
+    return data.data;
+  } catch (error) {
+    throw new Error(error.message || "Something went wrong");
+  }
+}

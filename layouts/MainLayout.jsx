@@ -1,6 +1,5 @@
 import Footer from "@/components/footer/Footer";
 import ResponsiveNavBar from "@/components/navbar/ResponsiveNavBar";
-import { Description } from "@mui/icons-material";
 import { Box } from "@mui/material";
 
 export default function MainLayout({ children }) {

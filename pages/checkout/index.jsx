@@ -269,7 +269,7 @@ function OrderCheckout() {
               </Grid>
 
               <Typography component="span" sx={{ fontSize: "0.80rem" }}>
-                Al hacer clic en Colocar orden aceptas nuestras{" "}
+                Al hacer clic en &quot;Colocar orden&quot; aceptas nuestras
                 <a href="#" sx={{ textDecoration: "underline" }}>
                   {" "}
                   politicas de privacidad

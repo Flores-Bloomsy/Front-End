@@ -1,6 +1,12 @@
 import { useRouter } from "next/router";
 
-import { ListItemIcon, Menu, MenuItem } from "@mui/material";
+import {
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function MenuProfile({
@@ -12,6 +18,10 @@ export default function MenuProfile({
   pagesToRender,
 }) {
   const router = useRouter();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  console.log(user);
 
   function logout() {
     onLogout();
@@ -25,18 +35,23 @@ export default function MenuProfile({
       onClick={handleClose}
       anchorEl={anchorEl}
     >
-      <MenuItem>{user?.name || user?.storeName} </MenuItem>
-      {pagesToRender.map((page) => (
-        <MenuItem key={page} onClick={() => router.push(page.link)}>
-          {page.page}
-        </MenuItem>
-      ))}
-      <MenuItem onClick={logout}>
-        <ListItemIcon>
-          <LogoutIcon />
-        </ListItemIcon>
-        Cerrar sesión
+      <MenuItem onClick={() => router.push("/dashboard")}>
+        {user?.name || user?.storeName}{" "}
       </MenuItem>
+      {isMobile &&
+        pagesToRender.map((page) => (
+          <MenuItem key={page} onClick={() => router.push(page.link)}>
+            {page.page}
+          </MenuItem>
+        ))}
+      {user && (
+        <MenuItem onClick={logout}>
+          <ListItemIcon>
+            <LogoutIcon />
+          </ListItemIcon>
+          Cerrar sesión
+        </MenuItem>
+      )}
     </Menu>
   );
 }

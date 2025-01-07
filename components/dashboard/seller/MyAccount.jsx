@@ -8,7 +8,6 @@ import { useRouter } from "next/router";
 export default function MyAccount() {
   const [user, setUser] = useState(null);
   const router = useRouter();
-  console.log(user);
   //solo se ejecuta en el cliente
   useEffect(() => {
     const token = localStorage.getItem("Token");

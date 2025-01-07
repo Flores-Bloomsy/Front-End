@@ -5,10 +5,11 @@ import {
   InputAdornment,
   Box,
   Button,
-  Badge,
+  useTheme,
   Container,
   Avatar,
   IconButton,
+  useMediaQuery,
 } from "@mui/material";
 import FilterVintageIcon from "@mui/icons-material/FilterVintage";
 import SearchIcon from "@mui/icons-material/Search";
@@ -62,8 +63,8 @@ export default function ResponsiveNavBar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [user, setUser] = useState(null);
   const open = Boolean(anchorEl);
+
   let pageToRender = pages;
-  console.log(user);
 
   function handleClick(event) {
     setAnchorEl(event.currentTarget);
@@ -189,12 +190,32 @@ export default function ResponsiveNavBar() {
               ),
             }}
           />
-
-          <MenuIcon
-            color="primary"
-            fontSize="large"
-            sx={{ display: { md: "none" } }}
-          />
+          {user ? (
+            <IconButton sx={{ p: 0 }}>
+              <Avatar
+                src={user?.profilePic || undefined}
+                alt={user?.email}
+                onClick={handleClick}
+                sx={{
+                  backgroundColor: "secondary.main",
+                  color: "text.primary",
+                  display: { md: "none" },
+                  "&:hover": {
+                    backgroundColor: "tertiary.main",
+                  },
+                }}
+              >
+                {user?.email?.charAt(0).toUpperCase()}{" "}
+              </Avatar>
+            </IconButton>
+          ) : (
+            <MenuIcon
+              color="primary"
+              fontSize="large"
+              sx={{ display: { md: "none" } }}
+              onClick={handleClick}
+            />
+          )}
         </Toolbar>
       </Container>
       <MenuProfile

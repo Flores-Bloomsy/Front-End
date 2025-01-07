@@ -78,19 +78,39 @@ export async function configProfile(dataUpdate, userId, userRole) {
 
 export async function getUserById(userId, userRole) {
   try {
+    const localStorageKey = `user_${userId}_${userRole}`; // Clave única para cada usuario y rol
+    const cachedData = localStorage.getItem(localStorageKey);
+
+    if (cachedData) {
+      // Si los datos ya existen en localStorage, los devolvemos
+      return JSON.parse(cachedData);
+    }
+
+    // Si no existe, hacemos la búsqueda
     const url =
       userRole === "buyer"
         ? `${API_URL}/auth/${userId}`
         : `${API_URL}/userseller/${userId}`;
 
-    console.log(url);
+    console.log(`Fetching data from: ${url}`);
 
     const response = await fetch(url);
 
-    const data = await response.json();
-    if (!data) throw new Error(data.message || `Error: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
 
-    return data.data.user;
+    const data = await response.json();
+    if (!data || !data.data || !data.data.user) {
+      throw new Error(data.message || `Error: ${response.status}`);
+    }
+
+    const userData = data.data.user;
+
+    // Guardamos los datos en localStorage
+    localStorage.setItem(localStorageKey, JSON.stringify(userData));
+
+    return userData;
   } catch (error) {
     throw new Error(error.message);
   }

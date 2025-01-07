@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
 
 import { Box, Button, Divider, Stack } from "@mui/material";
 import TocRoundedIcon from "@mui/icons-material/TocRounded";
@@ -26,16 +25,15 @@ const sellerMenuItems = [
   },
 ];
 
-export default function NavItemsSeller({ onSelect }) {
+export default function NavItemsSeller({ onSelect, userId, rol }) {
   const [selected, setSelected] = useState("Mi Cuenta");
-  const router = useRouter();
 
   function handleClick(text) {
     if (text === "Cerrar Sesión") {
       localStorage.removeItem("Token");
+      localStorage.removeItem(`user_${userId}_${rol}`);
 
-      router.replace("/");
-
+      window.location.href = "/";
       return;
     }
     setSelected(text);

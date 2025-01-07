@@ -1,6 +1,5 @@
 "user client";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Typography, Container, Box } from "@mui/material";
@@ -13,7 +12,6 @@ import ImageContainer from "@/components/ImageContainer";
 
 export default function LoginSeller() {
   const theme = useTheme();
-  const router = useRouter();
   const {
     handleSubmit,
     control,
@@ -34,7 +32,7 @@ export default function LoginSeller() {
 
       if (response.success) {
         localStorage.setItem("Token", response.token);
-        router.push("/");
+        window.location.href = "/";
       } else {
         enqueueSnackbar("Correo electrónico o contraseña incorrecta", {
           variant: "error",

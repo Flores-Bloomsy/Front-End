@@ -24,6 +24,11 @@ export default function ProfileDetails({
   picture,
   email,
 }) {
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedField, setSelectedField] = useState(null);
+  const [editableValue, setEditableValue] = useState({});
+  const storeName = name;
+
   if (!name || !phone || !address) {
     return (
       <Skeleton
@@ -33,10 +38,6 @@ export default function ProfileDetails({
       />
     );
   }
-  const [openDialog, setOpenDialog] = useState(false);
-  const [selectedField, setSelectedField] = useState(null);
-  const [editableValue, setEditableValue] = useState({});
-  const [storeName, setStoreName] = useState(name);
 
   const details = [
     {

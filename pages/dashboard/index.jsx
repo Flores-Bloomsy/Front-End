@@ -18,9 +18,10 @@ import Favorites from "@/components/dashboard/buyer/Favorites";
 import { Container, Divider } from "@mui/material";
 
 export default function Dashboard() {
-  const [rolUser, setRolUser] = useState(null);
+  const [userToken, setUserToken] = useState(null);
   const [selectedMenu, setSelectedMenu] = useState(null);
   const router = useRouter();
+  console.log("aa", userToken);
 
   function renderContent() {
     const contentMap = {
@@ -38,7 +39,7 @@ export default function Dashboard() {
     };
 
     // Usamos el rol y el menu seleccionado para obtener el componente correcto
-    return contentMap[rolUser]?.[selectedMenu] || <MyAccount />;
+    return contentMap[userToken?.rol]?.[selectedMenu] || <MyAccount />;
   }
 
   useEffect(() => {
@@ -49,17 +50,25 @@ export default function Dashboard() {
       return;
     }
 
-    const user = decodeToken(token);
+    const userDecode = decodeToken(token);
 
-    setRolUser(user.rol);
+    setUserToken(userDecode);
   }, []);
 
   return (
     <Container sx={{ display: "flex", gap: 2, mt: 5, height: "80vh" }}>
-      {rolUser === "seller" ? (
-        <NavItemsSeller onSelect={setSelectedMenu} />
+      {userToken?.rol === "seller" ? (
+        <NavItemsSeller
+          onSelect={setSelectedMenu}
+          userId={userToken?.id}
+          rol={userToken?.rol}
+        />
       ) : (
-        <NavItemsBuyer onSelect={setSelectedMenu} />
+        <NavItemsBuyer
+          onSelect={setSelectedMenu}
+          userId={userToken?.id}
+          rol={userToken?.rol}
+        />
       )}
       <Divider orientation="vertical" flexItem />
       {renderContent()}

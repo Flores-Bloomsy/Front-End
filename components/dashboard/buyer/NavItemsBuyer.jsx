@@ -32,16 +32,16 @@ const buyerMenuItems = [
   },
 ];
 
-export default function NavItemsBuyer({ onSelect }) {
+export default function NavItemsBuyer({ onSelect, userId, rol }) {
   const [selected, setSelected] = useState(null);
   const router = useRouter();
 
   function handleClick(text) {
     if (text === "Cerrar Sesión") {
       localStorage.removeItem("Token");
+      localStorage.removeItem(`user_${userId}_${rol}`);
 
-      router.push("/");
-
+      window.location.href = "/";
       return;
     }
     setSelected(text);

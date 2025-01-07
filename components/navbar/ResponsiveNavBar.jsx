@@ -13,14 +13,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { decodeToken } from "@/utils/decodeToken";
 import { getUserById } from "@/utils/apiSeller";
+import { useEffect, useState } from "react";
 
 const pages = [
   {
     page: "Catálogo",
-    link: "/",
+    link: "/bouquet",
   },
   {
     page: "Registrarse",
@@ -58,24 +58,27 @@ const iconNavBar = [SearchIcon, ShoppingCartOutlinedIcon];
 export default function ResponsiveNavBar() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
-
-  // console.log("user", user);
+  console.log(user);
 
   useEffect(() => {
     const localToken = localStorage.getItem("Token");
     if (!localToken) return;
 
     const decodeUser = decodeToken(localToken);
-    console.log(decodeUser);
 
     getUserById(decodeUser.id, decodeUser.rol)
       .then((response) => setUser(response))
       .catch((error) => setError(error));
   }, []);
-  // console.log("usersss", user);
+  let pageToRender = pages;
 
-  // let pageToRender = pages;
-  // console.log({ pageToRender });
+  pageToRender =
+    user?.rol === "seller"
+      ? pagesUserSeller
+      : user?.rol === "buyer"
+      ? pagesUserBuyer
+      : pages;
+  console.log(pageToRender);
   return (
     <AppBar
       position="sticky"
@@ -97,7 +100,7 @@ export default function ResponsiveNavBar() {
               display: { xs: "none", sm: "none", md: "flex" },
             }}
           >
-            {pages.map((page) => {
+            {pageToRender.map((page) => {
               return (
                 <Link href={page.link} key={page.page}>
                   <Button>{page.page}</Button>

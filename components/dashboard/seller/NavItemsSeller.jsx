@@ -21,6 +21,10 @@ const sellerMenuItems = [
   },
   {
     icon: <LogoutIcon />,
+    text: "Conectar paypal",
+  },
+  {
+    icon: <LogoutIcon />,
     text: "Cerrar Sesión",
   },
 ];

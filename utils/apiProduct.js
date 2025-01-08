@@ -21,17 +21,14 @@ export const createProduct = async (data, token) => {
     console.log(productData);
 
     // Hacemos la solicitud POST al backend
-    const response = await fetch(
-      "http://localhost:8080/bouquet/create-bouquet",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(productData),
-      }
-    );
+    const response = await fetch(`${API_URL}/bouquet/create-bouquet`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(productData),
+    });
 
     // Parseamos la respuesta
     const result = await response.json();

@@ -16,6 +16,7 @@ import MyOrders from "@/components/dashboard/buyer/MyOrders";
 import Favorites from "@/components/dashboard/buyer/Favorites";
 
 import { Container, Divider } from "@mui/material";
+import RedirectSellerButton from "./paypalRegister";
 
 export default function Dashboard() {
   const [userToken, setUserToken] = useState(null);
@@ -29,6 +30,7 @@ export default function Dashboard() {
         Ordenes: <Orders />,
         Productos: <Products />,
         "Mi Cuenta": <MyAccount />,
+        "Conectar paypal": <RedirectSellerButton />,
       },
       buyer: {
         "Mis Pedidos": <MyOrders />,

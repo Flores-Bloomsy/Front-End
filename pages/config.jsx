@@ -1,19 +1,23 @@
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+
 import CardAddImg from "@/components/profileConfig/CardAddImg";
 import ProfileHeader from "@/components/profileConfig/ProfileHeader";
 import UserDataFormCard from "@/components/profileConfig/UserDataFormCard";
-import { Box, Container } from "@mui/material";
-import { configProfileSchema } from "@/utils/yupSchema";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+
 import { decodeToken } from "@/utils/decodeToken";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { configProfile, getUserById } from "@/utils/apiSeller";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { configProfileSchema } from "@/utils/yupSchema";
+
+import { Box, Container } from "@mui/material";
 
 export default function Config() {
   const [user, setUser] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [image, setImageUrl] = useState(null);
 
   const router = useRouter();
 
@@ -45,16 +49,17 @@ export default function Config() {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm({
     resolver: yupResolver(configProfileSchema),
     context: { role },
   });
-
-  const formValues = watch();
-
+  function handleImageUrlChange(newImageUrl) {
+    setImageUrl(newImageUrl);
+  }
   async function onSubmit(data) {
+    //formato de es balido en el backend
     const dataUpdate = {
+      profilePic: image,
       phone: data.phone,
       address: {
         street: data.addressStreet,
@@ -71,7 +76,7 @@ export default function Config() {
         closing: data.scheduleClosing,
       };
     }
-
+    console.log("ada", dataUpdate);
     if (role === "buyer") {
       dataUpdate.name = `${data.firstName} ${data.lastName}`;
     }
@@ -106,12 +111,15 @@ export default function Config() {
             register={register}
             errors={errors}
             email={user?.email}
+            onImageUrlChange={handleImageUrlChange}
           />
           <UserDataFormCard
+            textoTitulo={"Bienbenido a Bloom&Bits"}
             role={role}
             register={register}
             errors={errors}
             isSubmitting={isSubmitting}
+            textoButton={"enviar formulario"}
           />
         </Box>
       </form>

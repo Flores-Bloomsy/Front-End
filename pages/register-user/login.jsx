@@ -1,6 +1,5 @@
 "user client";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Typography, Container, Box } from "@mui/material";
@@ -13,7 +12,6 @@ import ImageContainer from "@/components/ImageContainer";
 
 export default function HandleLogin() {
   const theme = useTheme();
-  const router = useRouter();
   const {
     handleSubmit,
     control,
@@ -34,7 +32,7 @@ export default function HandleLogin() {
 
       if (response) {
         localStorage.setItem("Token", response);
-        router.push("/");
+        window.location.href = "/";
       } else {
         enqueueSnackbar("Credenciales incorrectas. Intenta nuevamente.", {
           variant: "error",

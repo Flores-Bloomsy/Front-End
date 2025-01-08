@@ -1,4 +1,5 @@
 import { Box, Button, Container, Typography } from "@mui/material";
+import Link from "next/link";
 
 export default function SectionOne() {
   return (
@@ -48,6 +49,8 @@ export default function SectionOne() {
           cada ocasión.
         </Typography>
         <Button
+          component={Link}
+          href="/bouquet"
           variant="contained"
           sx={{
             borderRadius: " 25px 0 25px 0",

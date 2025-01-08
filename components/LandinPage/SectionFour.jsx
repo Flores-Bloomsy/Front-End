@@ -6,6 +6,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import InfoCard from "./InfoCard";
+import Link from "next/link";
 
 export default function SectionFo() {
   const occasions = [
@@ -66,6 +67,8 @@ export default function SectionFo() {
         ))}
       </Grid2>
       <Button
+        component={Link}
+        href="/bouquet"
         variant="contained"
         sx={{
           borderRadius: " 25px 0 25px 0",

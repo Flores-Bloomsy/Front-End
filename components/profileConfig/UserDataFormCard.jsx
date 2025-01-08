@@ -1,11 +1,19 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function UserDataFormCard({
   role,
   register,
   errors,
   isSubmitting,
+  textoButton,
+  textoTitulo,
+  linkTo,
+  onSubmitHandler,
 }) {
+  const router = useRouter();
+  const { pathname } = router;
   return (
     <Container
       sx={{
@@ -20,7 +28,7 @@ export default function UserDataFormCard({
       }}
     >
       <Typography sx={{ width: "100%", textAlign: "left" }}>
-        ¡Bienvenido a Blooms&bits!
+        {textoTitulo}
       </Typography>
 
       {role === "seller" ? (
@@ -166,7 +174,18 @@ export default function UserDataFormCard({
           error={!!errors.addressState}
           helperText={errors.addressState?.message}
         />
+        {pathname === "/checkout/address" && (
+          <TextField
+            {...register("country")}
+            label="país"
+            variant="outlined"
+            fullWidth
+            error={!!errors.country}
+            helperText={errors.country?.message}
+          />
+        )}
       </Box>
+
       <TextField
         {...register("addressPostalCode")}
         label="Código Postal"
@@ -177,18 +196,38 @@ export default function UserDataFormCard({
         helperText={errors.addressPostalCode?.message}
       />
       <Box sx={{ width: "100%", textAlign: "right" }}>
-        <Button
-          variant="contained"
-          type="submit"
-          disabled={isSubmitting}
-          sx={{
-            borderRadius: " 25px 0 25px 0",
-            padding: ".8rem 1.5rem",
-            width: { xs: "100%", lg: "auto" },
-          }}
-        >
-          Completar Configuración
-        </Button>
+        {linkTo ? (
+          // Si 'linkTo' está definido, renderiza un enlace
+          <Link href={linkTo}>
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={isSubmitting}
+              sx={{
+                borderRadius: " 25px 0 25px 0",
+                padding: ".8rem 1.5rem",
+                width: { xs: "100%", lg: "auto" },
+              }}
+            >
+              {textoButton}
+            </Button>
+          </Link>
+        ) : (
+          // Si 'linkTo' no está presente, renderiza un botón normal
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={isSubmitting}
+            onClick={onSubmitHandler}
+            sx={{
+              borderRadius: " 25px 0 25px 0",
+              padding: ".8rem 1.5rem",
+              width: { xs: "100%", lg: "auto" },
+            }}
+          >
+            {textoButton}
+          </Button>
+        )}
       </Box>
     </Container>
   );

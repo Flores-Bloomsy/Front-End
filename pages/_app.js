@@ -1,4 +1,6 @@
 import { ThemeProvider } from "@mui/material/styles";
+import { ShippingProvider } from "@/context/shippingContext";
+import { PayPalProvider } from "@/providers/providers";
 import theme from "../theme/index";
 import { CssBaseline } from "@mui/material";
 import { SnackbarProvider } from "notistack";
@@ -9,9 +11,13 @@ export default function App({ Component, pageProps }) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <SnackbarProvider maxSnack={3}>
-        <MainLayout>
-          <Component {...pageProps} />
-        </MainLayout>
+        <ShippingProvider>
+          <PayPalProvider>
+            <MainLayout>
+              <Component {...pageProps} />
+            </MainLayout>
+          </PayPalProvider>
+        </ShippingProvider>
       </SnackbarProvider>
     </ThemeProvider>
   );

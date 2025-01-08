@@ -1,4 +1,4 @@
-const API_URL = `http://localhost:8080/`;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function Signup(email, password) {
   // Obtener el carrito desde el localStorage
@@ -16,7 +16,7 @@ export async function Signup(email, password) {
   }
 
   // Enviar la solicitud de registro al servidor
-  const response = await fetch(`${API_URL}auth/signup`, {
+  const response = await fetch(`${API_URL}/auth/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export async function Signup(email, password) {
 
 export async function Login(email, password) {
   try {
-    const response = await fetch(`${API_URL}auth/login`, {
+    const response = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export async function getOrdersByUser() {
   try {
     if (!token) throw new Error("Unauthorized");
 
-    const response = await fetch(`${API_URL}order/orders-by-buyer`, {
+    const response = await fetch(`${API_URL}/order/orders-by-buyer`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

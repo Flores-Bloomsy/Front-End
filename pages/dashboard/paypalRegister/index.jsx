@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { decodeToken } from "@/utils/decodeToken";
 import { Button, Container } from "@mui/material";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const RedirectSellerButton = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,7 +29,7 @@ const RedirectSellerButton = () => {
 
       // Enviar el ID al backend
       const response = await fetch(
-        `http://localhost:8080/userseller/create-partner-referral`,
+        `${API_URL}/userseller/create-partner-referral`,
         {
           method: "POST",
           headers: {

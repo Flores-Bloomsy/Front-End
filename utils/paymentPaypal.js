@@ -1,3 +1,5 @@
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export const setTransaction = async (
   orderId,
   paypalTransactionId,
@@ -8,7 +10,7 @@ export const setTransaction = async (
 
   try {
     const response = await fetch(
-      `http://localhost:8080/order/update-paypal-transaction/${orderId}`,
+      `${API_URL}/order/update-paypal-transaction/${orderId}`,
       {
         method: "PATCH",
         headers: {

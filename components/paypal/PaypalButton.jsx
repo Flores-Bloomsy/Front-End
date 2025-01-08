@@ -2,6 +2,8 @@ import { setTransaction } from "@/utils/paymentPaypal";
 import { Box, Skeleton } from "@mui/material";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function PaypalButton({
   customerId,
   products,
@@ -38,16 +40,13 @@ export default function PaypalButton({
 
     try {
       // Enviar los datos al backend para crear el pago en PayPal
-      const response = await fetch(
-        "http://localhost:8080/order/create-payment",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(orderData),
-        }
-      );
+      const response = await fetch(`${API_URL}/order/create-payment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
 
       if (!response.ok) {
         throw new Error("Error al crear el pago en el backend");

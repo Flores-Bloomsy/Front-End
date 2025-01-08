@@ -1,3 +1,5 @@
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export const placeOrder = async (shipping, items) => {
   const shippingAddress = {
     street: shipping.street,
@@ -39,7 +41,7 @@ const sendOrderToServer = async (payload) => {
       throw new Error("No token found");
     }
 
-    const response = await fetch("http://localhost:8080/order/new-order", {
+    const response = await fetch(`${API_URL}/order/new-order`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -72,7 +74,7 @@ const sendOrderToServer = async (payload) => {
 export const getLatestOrder = async () => {
   const token = localStorage.getItem("Token");
   try {
-    const res = await fetch("http://localhost:8080/order/orders-by-buyer", {
+    const res = await fetch(`${API_URL}/order/orders-by-buyer`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -111,7 +113,7 @@ export const getLatestOrder = async () => {
 export const getOrdersByUserId = async () => {
   const token = localStorage.getItem("Token");
   try {
-    const res = await fetch(`http://localhost:8080/order/orders-by-buyer`, {
+    const res = await fetch(`${API_URL}/order/orders-by-buyer`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

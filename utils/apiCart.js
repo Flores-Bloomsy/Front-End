@@ -9,7 +9,7 @@ export const fetchCartItems = async (setCartItems, setLoading) => {
       return;
     }
 
-    const response = await fetch("http://localhost:8080/cart/get-cart", {
+    const response = await fetch(`${API_URL}/cart/get-cart`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -59,22 +59,19 @@ export const handleIncrement = async (itemId, cartItems, setCartItems) => {
 
   // Enviar la actualización al backend
   try {
-    const response = await fetch(
-      "http://localhost:8080/cart/update-product-quantity",
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          bouquetFlowerId: itemId, // ID único del producto
-          quantity: updatedCartItems.find(
-            (item) => item.bouquetFlowerId === itemId
-          ).quantity, // Nueva cantidad
-        }),
-      }
-    );
+    const response = await fetch(`${API_URL}/cart/update-product-quantity`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        bouquetFlowerId: itemId, // ID único del producto
+        quantity: updatedCartItems.find(
+          (item) => item.bouquetFlowerId === itemId
+        ).quantity, // Nueva cantidad
+      }),
+    });
     console.log("soy response", response);
 
     const data = await response.json();
@@ -102,22 +99,19 @@ export const handleDecrement = async (itemId, cartItems, setCartItems) => {
 
   // Enviar la actualización al backend
   try {
-    const response = await fetch(
-      "http://localhost:8080/cart/update-product-quantity",
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          bouquetFlowerId: itemId, // ID único del producto
-          quantity: updatedCartItems.find(
-            (item) => item.bouquetFlowerId === itemId
-          ).quantity, // Nueva cantidad
-        }),
-      }
-    );
+    const response = await fetch(`${API_URL}/cart/update-product-quantity`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        bouquetFlowerId: itemId, // ID único del producto
+        quantity: updatedCartItems.find(
+          (item) => item.bouquetFlowerId === itemId
+        ).quantity, // Nueva cantidad
+      }),
+    });
 
     const data = await response.json();
     if (!data.success) {
@@ -133,7 +127,7 @@ export const handleRemove = async (id, setCartItems) => {
   const token = localStorage.getItem("Token");
   try {
     const response = await fetch(
-      `http://localhost:8080/cart/remove-product/${id}`, // Asegúrate de pasar el id correcto
+      `${API_URL}/cart/remove-product/${id}`, // Asegúrate de pasar el id correcto
       {
         method: "DELETE",
         headers: {

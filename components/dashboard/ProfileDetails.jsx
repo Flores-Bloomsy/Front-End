@@ -101,7 +101,7 @@ export default function ProfileDetails({
       ...editableValue,
       address: {
         ...editableValue.address,
-        [name]: value,
+        [name]: value.trim(),
       },
     });
 
@@ -109,6 +109,9 @@ export default function ProfileDetails({
   }
 
   async function handleSave() {
+    if (!editableValue) {
+      return;
+    }
     console.log(editableValue);
     const valueSend = { [selectedField]: editableValue };
 
@@ -119,13 +122,10 @@ export default function ProfileDetails({
         userId,
         role
       );
-      console.log(response);
     } else if (selectedField === "address") {
       const response = await configProfile(editableValue, userId, role);
-      console.log(response);
     } else {
       const response = await configProfile(valueSend, userId, role);
-      console.log(response);
     }
 
     setOpenDialog(false);

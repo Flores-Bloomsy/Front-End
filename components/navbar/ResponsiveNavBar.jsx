@@ -1,3 +1,12 @@
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
+import Link from "next/link";
+
+import MenuProfile from "./MenuProfile";
+import { decodeToken } from "@/utils/decodeToken";
+import { getUserById } from "@/utils/apiSeller";
+
 import {
   AppBar,
   TextField,
@@ -5,21 +14,15 @@ import {
   InputAdornment,
   Box,
   Button,
-  useTheme,
   Container,
   Avatar,
   IconButton,
-  useMediaQuery,
 } from "@mui/material";
+
 import FilterVintageIcon from "@mui/icons-material/FilterVintage";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import Link from "next/link";
-import { decodeToken } from "@/utils/decodeToken";
-import { getUserById } from "@/utils/apiSeller";
-import { useEffect, useState } from "react";
-import MenuProfile from "./MenuProfile";
 
 const pages = [
   {
@@ -62,6 +65,8 @@ const iconNavBar = [SearchIcon, ShoppingCartOutlinedIcon];
 export default function ResponsiveNavBar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [user, setUser] = useState(null);
+  const router = useRouter();
+
   const open = Boolean(anchorEl);
 
   let pageToRender = pages;
@@ -89,7 +94,7 @@ export default function ResponsiveNavBar() {
     getUserById(decodeUser.id, decodeUser.rol)
       .then((response) => setUser(response))
       .catch((error) => console.log(error));
-  }, []);
+  }, [router]);
 
   pageToRender =
     user?.rol === "seller"
@@ -97,7 +102,6 @@ export default function ResponsiveNavBar() {
       : user?.rol === "buyer"
       ? pagesUserBuyer
       : pages;
-  console.log(pageToRender);
   return (
     <AppBar
       position="sticky"
@@ -136,19 +140,21 @@ export default function ResponsiveNavBar() {
               display: { xs: "none", sm: "none", md: "flex" },
             }}
           >
-            {iconNavBar.map((Icon, index) => (
-              <IconButton
-                key={index}
-                sx={{
-                  backgroundColor: "secondary.main",
-                  "&:hover": {
-                    backgroundColor: "tertiary.main",
-                  },
-                }}
-              >
-                <Icon color="primary" />
-              </IconButton>
-            ))}
+            {(!user || user?.rol === "buyer") &&
+              iconNavBar.map((Icon, index) => (
+                <IconButton
+                  key={index}
+                  sx={{
+                    backgroundColor: "secondary.main",
+                    "&:hover": {
+                      backgroundColor: "tertiary.main",
+                    },
+                  }}
+                >
+                  <Icon color="primary" />
+                </IconButton>
+              ))}
+
             {user && (
               <IconButton sx={{ p: 0 }}>
                 <Avatar

@@ -19,6 +19,7 @@ import Image from "next/image";
 
 import { getLatestOrder } from "@/utils/apiPlaceOrder";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 function PayOrder() {
   const router = useRouter();
@@ -233,9 +234,12 @@ function PayOrder() {
                 </Grid>
               </Grid>
               {latestOrder.paymentStatus === "COMPLETED" ? (
-                <OrderStatus
-                  paymentStatus={latestOrder.paymentStatus ?? false}
-                />
+                <Box>
+                  <OrderStatus
+                    paymentStatus={latestOrder.paymentStatus ?? false}
+                  />
+                  <Link href={"/orders"}> Ver todas mis ordenes</Link>
+                </Box>
               ) : (
                 <PaypalButton
                   customerId={latestOrder.customerId}

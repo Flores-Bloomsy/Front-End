@@ -63,9 +63,17 @@ export async function getProductById(id) {
   try {
     const response = await fetch(`${API_URL}/bouquet/get-bouquet-by-id/${id}`);
 
-    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+    if (!response.ok) {
+      const errorDetails = await response.json();
+      throw new Error(
+        `Error ${response.status}: ${
+          errorDetails.message || response.statusText
+        }`
+      );
+    }
 
     const data = await response.json();
+    // console.log("soy data de getProduct", data);
     return data.data.getBouquetById;
   } catch (error) {
     throw new Error(error.message);

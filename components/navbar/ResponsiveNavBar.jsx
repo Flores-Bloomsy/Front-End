@@ -6,6 +6,7 @@ import Link from "next/link";
 import MenuProfile from "./MenuProfile";
 import { decodeToken } from "@/utils/decodeToken";
 import { getUserById } from "@/utils/apiSeller";
+import { fetchCartItems } from "@/utils/apiCart";
 
 import {
   AppBar,
@@ -18,8 +19,7 @@ import {
   Avatar,
   IconButton,
 } from "@mui/material";
-
-import FilterVintageIcon from "@mui/icons-material/FilterVintage";
+//import FilterVintageIcon from "@mui/icons-material/FilterVintage";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
@@ -64,6 +64,9 @@ const iconNavBar = [SearchIcon, ShoppingCartOutlinedIcon];
 
 export default function ResponsiveNavBar() {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
+  const [totalQuantity, setTotalQuantity] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const router = useRouter();
 
@@ -96,6 +99,18 @@ export default function ResponsiveNavBar() {
       .catch((error) => console.log(error));
   }, [router]);
 
+  useEffect(() => {
+    fetchCartItems(setCartItems, setLoading);
+  }, []);
+
+  useEffect(() => {
+    const updatedTotalQuantity = cartItems.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+    setTotalQuantity(updatedTotalQuantity);
+  }, [cartItems]);
+
   pageToRender =
     user?.rol === "seller"
       ? pagesUserSeller
@@ -114,7 +129,21 @@ export default function ResponsiveNavBar() {
     >
       <Container maxWidth="lg">
         <Toolbar>
-          <FilterVintageIcon />
+          {/**<FilterVintageIcon /> */}
+
+          <Link href="/">
+            <Box
+              component="img"
+              sx={{
+                width: "100%",
+                maxHeight: "45px",
+                objectFit: "cover",
+                borderRadius: "50%",
+              }}
+              alt="logo de la imagen"
+              src="/BloomsAndsBits.png"
+            />
+          </Link>
 
           <Box
             sx={{
@@ -152,9 +181,30 @@ export default function ResponsiveNavBar() {
                   }}
                 >
                   <Icon color="primary" />
+                  {Icon === ShoppingCartOutlinedIcon && totalQuantity > 0 && (
+                    <Box
+                      component="span"
+                      sx={{
+                        position: "absolute",
+                        top: -5,
+                        right: -5,
+                        backgroundColor: "primary.main",
+                        color: "white",
+                        borderRadius: "50%",
+                        width: "20px",
+                        height: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "12px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {totalQuantity}
+                    </Box>
+                  )}
                 </IconButton>
               ))}
-
             {user && (
               <IconButton sx={{ p: 0 }}>
                 <Avatar

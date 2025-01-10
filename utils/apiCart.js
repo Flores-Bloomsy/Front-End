@@ -227,7 +227,7 @@ export const clearCartBackend = async () => {
   console.log("esto es ownerdId", ownerId);
 
   try {
-    const response = await fetch(`http://localhost:8080/cart/${ownerId}`, {
+    const response = await fetch(`${API_URL}/cart/${ownerId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

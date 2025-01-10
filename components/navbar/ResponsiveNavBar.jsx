@@ -185,7 +185,7 @@ export default function ResponsiveNavBar() {
                       position: "absolute",
                       top: -5,
                       right: -5,
-                      backgroundColor: "error.main",
+                      backgroundColor: "primary.main",
                       color: "white",
                       borderRadius: "50%",
                       width: "20px",

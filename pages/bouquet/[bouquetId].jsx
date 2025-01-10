@@ -4,7 +4,7 @@ import { getAllProduct, getProductById } from "@/utils/apiProduct";
 import { CardMedia, Container } from "@mui/material";
 
 export default function BouquetDetail({ bouquet }) {
-  console.log(bouquet);
+  //console.log(bouquet);
   return (
     <Container
       sx={{

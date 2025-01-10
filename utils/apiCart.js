@@ -1,3 +1,5 @@
+import { decodeToken } from "./decodeToken";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 //traer los productos del cart
@@ -137,7 +139,7 @@ export const handleRemove = async (id, setCartItems) => {
       {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${token}`, //  requiere autenticación, pasa el token aquí
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -201,3 +203,45 @@ export async function addProductToShoppingCart(product) {
     throw new Error(error.message);
   }
 }
+
+// limpiar el carrito
+export const clearCartBackend = async () => {
+  const token = localStorage.getItem("Token");
+
+  //console.log({ token });
+  if (!token) {
+    console.error("Token no encontrado en localStorage");
+    return false;
+  }
+
+  const decodedToken = decodeToken(token);
+  console.log({ decodedToken });
+
+  if (!decodedToken || !decodedToken.id) {
+    console.error("No se pudo obtener el ownerId del token");
+    return false;
+  }
+
+  const ownerId = decodedToken.id;
+
+  console.log("esto es ownerdId", ownerId);
+
+  try {
+    const response = await fetch(`http://localhost:8080/cart/${ownerId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al limpiar el carrito en el servidor");
+    }
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};

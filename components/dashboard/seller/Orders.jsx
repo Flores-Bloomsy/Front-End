@@ -28,7 +28,7 @@ export default function Orders() {
   }, []);
 
   return (
-    <Stack sx={{ width: "100%", height: "100%" }} spacing={2}>
+    <Stack sx={{ width: "90%", height: "100%" }} spacing={2}>
       <Typography
         variant="h1"
         sx={{

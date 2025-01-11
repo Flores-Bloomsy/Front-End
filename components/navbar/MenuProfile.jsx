@@ -7,6 +7,8 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function MenuProfile({
@@ -20,14 +22,45 @@ export default function MenuProfile({
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const profileIsConfigured = {
+    phone: user?.phone,
+    name: user?.name || user?.storeName,
+    address: {
+      street: user?.address?.street,
+      city: user?.address?.city,
+      state: user?.address?.state,
+      number: user?.address?.number,
+      postalCode: user?.address?.postalCode,
+    },
+  };
 
-  console.log(user);
+  function isProfileIncomplete(profile) {
+    const address = profile.address;
+
+    const isMainInfoMissing = !profile.name || !profile.phone;
+    const isAddressMissing =
+      !address.street ||
+      !address.city ||
+      !address.state ||
+      !address.number ||
+      !address.postalCode;
+
+    return isMainInfoMissing || isAddressMissing;
+  }
+  const profileIncomplete = isProfileIncomplete(profileIsConfigured);
 
   function logout() {
     onLogout();
 
     router.push("/");
   }
+
+  function navigateToProfileSetup() {
+    const link = profileIncomplete ? "/config" : "/dashboard";
+
+    router.push(link);
+  }
+
   return (
     <Menu
       open={open}
@@ -35,9 +68,17 @@ export default function MenuProfile({
       onClick={handleClose}
       anchorEl={anchorEl}
     >
-      <MenuItem onClick={() => router.push("/dashboard")}>
-        {user?.name || user?.storeName}{" "}
-      </MenuItem>
+      {user && (
+        <MenuItem
+          sx={{ display: "flex", justifyContent: "space-between" }}
+          onClick={navigateToProfileSetup}
+        >
+          {profileIncomplete
+            ? "Configura tu perfil"
+            : user?.name || user?.storeName}
+          <SettingsOutlinedIcon />
+        </MenuItem>
+      )}
       {isMobile &&
         pagesToRender.map((page) => (
           <MenuItem key={page} onClick={() => router.push(page.link)}>

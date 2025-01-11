@@ -14,8 +14,8 @@ export default function Home() {
       <SectionOne />
       <SectionTwo />
       <SectionThree />
-      <SectionFour />
-      <SectionFive />
+      <SectionFour navigationId="section-four" />
+      <SectionFive navigationId="section-five" />
     </Container>
   );
 }

@@ -1,17 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import AsideFilter from "@/components/bouquets/AsideFilter";
 import CardProduct from "@/components/bouquets/CardProduct";
 import { getAllProduct } from "@/utils/apiProduct";
 import { Grid2, Container, Divider, Button, Drawer, Box } from "@mui/material";
+import { useRouter } from "next/router";
 
 export default function Bouquets({ bouquets }) {
   const [openFilter, setOpenFilter] = useState(false);
+  const router = useRouter();
+  const { query } = router;
+  console.log(router.query);
   console.log(openFilter);
 
   const [filters, setFilters] = useState({
     rangoPrecio: { desde: "", hasta: "" },
-    occasion: {},
+    occasion: [],
     size: null,
     color: [],
     style: null,
@@ -19,6 +23,16 @@ export default function Bouquets({ bouquets }) {
     personality: [],
   });
   console.log(filters);
+  //actualiza los filtros cuando la url cambia
+  useEffect(() => {
+    const newFilters = { ...filters };
+    if (query.occasion) newFilters.occasion = [query.occasion];
+
+    if (query.flowerType) newFilters.flowerType = [query.flowerType];
+
+    setFilters(newFilters);
+  }, [query]);
+
   function toggleDrawer() {
     setOpenFilter(!openFilter);
   }
@@ -37,6 +51,7 @@ export default function Bouquets({ bouquets }) {
 
     setFilters(cleanFilters);
   }
+
   const filteredBouquets = bouquets.filter((bouquet) => {
     const { desde, hasta } = filters.rangoPrecio || {};
 

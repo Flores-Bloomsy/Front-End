@@ -49,7 +49,7 @@ export default function Products() {
   }
 
   return (
-    <Stack component="main" sx={{ width: "100%", height: "100%" }} spacing={2}>
+    <Stack component="main" sx={{ width: "90%", height: "100%" }} spacing={2}>
       <Stack direction="row" justifyContent="space-between">
         <Typography
           variant="h1"

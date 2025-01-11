@@ -138,7 +138,7 @@ export default function ProfileDetails({
           display: "flex",
           flexDirection: "column",
           gap: 1,
-          width: "100%",
+          width: "90%",
           height: "fit-content",
           backgroundColor: "#fff",
           boxShadow: 2,

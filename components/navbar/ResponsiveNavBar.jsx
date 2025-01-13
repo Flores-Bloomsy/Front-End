@@ -46,7 +46,7 @@ const pagesUserBuyer = [
   },
   {
     page: "Encuentra el ramo perfecto",
-    link: "/bouquet",
+    link: "/bouquet/recommendation",
   },
 ];
 

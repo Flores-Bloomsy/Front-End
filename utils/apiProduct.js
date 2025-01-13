@@ -157,3 +157,21 @@ export async function updateProductById(productId, data) {
     throw new Error(error.message || "Something went wrong");
   }
 }
+
+export async function getBouquetByFilter(filter) {
+  try {
+    const response = await fetch(
+      `${API_URL}/bouquet/search?occasion=${filter.occasion}&size=${filter.size}&color=${filter.color}&style=${filter.style}&flowerType=${filter.flowerType}`
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message);
+    }
+
+    const responseData = await response.json();
+    return responseData.data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}

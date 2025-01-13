@@ -14,7 +14,7 @@ import theme from "@/theme";
 import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";
-import { fetchCartItems } from "@/utils/apiCart";
+import { fetchCartItems, clearCartBackend } from "@/utils/apiCart";
 import { useEffect, useState } from "react";
 import { placeOrder } from "@/utils/apiPlaceOrder";
 import { useRouter } from "next/router";
@@ -64,6 +64,13 @@ function OrderCheckout() {
       setErrorMessage(resp.message);
       return;
     }
+
+    const cartCleared = await clearCartBackend();
+    if (!cartCleared) {
+      console.error("Error al limpiar el carrito en el backend.");
+      return;
+    }
+
     clearCartItems();
 
     // Redirige usando el número de orden

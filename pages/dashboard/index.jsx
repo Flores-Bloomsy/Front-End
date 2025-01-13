@@ -72,7 +72,11 @@ export default function Dashboard() {
           rol={userToken?.rol}
         />
       )}
-      <Divider orientation="vertical" flexItem />
+      <Divider
+        sx={{ display: { xs: "none", sm: "block" } }}
+        orientation="vertical"
+        flexItem
+      />
       {renderContent()}
     </Container>
   );

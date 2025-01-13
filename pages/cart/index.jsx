@@ -164,7 +164,10 @@ function CartPage() {
                 >
                   <Box
                     component="span"
-                    sx={{ fontFamily: theme.typography.fontFamily }}
+                    sx={{
+                      fontFamily: theme.typography.fontFamily,
+                      fontSize: "20px",
+                    }}
                   >
                     {item.name}
                   </Box>

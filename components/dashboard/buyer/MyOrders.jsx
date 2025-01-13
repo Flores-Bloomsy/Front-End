@@ -35,7 +35,7 @@ export default function MyOrders() {
       .catch((error) => console.log(error));
   }, []);
   return (
-    <Stack sx={{ width: "100%", height: "100%" }} spacing={2}>
+    <Stack sx={{ width: "90%", height: "100%" }} spacing={2}>
       <Typography sx={{ display: "flex", gap: 1, fontWeight: "bolder" }}>
         <CardGiftcardIcon color="primary" />
         Historial de Compras

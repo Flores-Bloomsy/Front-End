@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { getOrdersForSeller } from "@/utils/apiSeller";
 
 import {
+  Button,
+  IconButton,
   Stack,
   Table,
   TableBody,
@@ -13,11 +15,16 @@ import {
   Typography,
 } from "@mui/material";
 
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import TocRoundedIcon from "@mui/icons-material/TocRounded";
 import { formatDate } from "@/utils/formatDate";
+import { DialogMailingAddress } from "../DialogMailingAddress";
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const open = Boolean(anchorEl);
 
   console.log(orders);
 
@@ -27,8 +34,18 @@ export default function Orders() {
       .catch((error) => console.log(error));
   }, []);
 
+  function handleMenuOpen(event, order) {
+    setAnchorEl(event.currentTarget);
+    setSelectedOrder(order);
+  }
+
+  function handleMenuClose() {
+    setAnchorEl(null);
+    setSelectedOrder(null);
+  }
+
   return (
-    <Stack sx={{ width: "100%", height: "100%" }} spacing={2}>
+    <Stack sx={{ width: { xs: "90%", sm: "80%" }, height: "100%" }} spacing={2}>
       <Typography
         variant="h1"
         sx={{
@@ -56,6 +73,7 @@ export default function Orders() {
               <TableCell>Estado del Pago</TableCell>
               <TableCell>Estado del Envio</TableCell>
               <TableCell>Total</TableCell>
+              <TableCell align="center">Opciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -67,11 +85,21 @@ export default function Orders() {
                 <TableCell>{order.paymentStatus}</TableCell>
                 <TableCell>{order.orderStatus}</TableCell>
                 <TableCell>{`$ ${order.totalAmount}`}</TableCell>
+                <TableCell align="center">
+                  <Button onClick={(e) => handleMenuOpen(e, order)}>
+                    Mas datos
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <DialogMailingAddress
+        open={open}
+        onClose={handleMenuClose}
+        order={selectedOrder}
+      />
     </Stack>
   );
 }

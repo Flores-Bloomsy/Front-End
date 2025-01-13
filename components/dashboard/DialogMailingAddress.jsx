@@ -63,8 +63,8 @@ export function DialogMailingAddress({ open, onClose, order }) {
         </Stack>
         <Stack spacing={1}>
           <Typography variant="h4">Productos a Enviar</Typography>
-          {productsFilter?.map((product) => (
-            <ProductCard product={product} />
+          {productsFilter?.map((product, index) => (
+            <ProductCard key={index} product={product} />
           ))}
         </Stack>
       </DialogContent>

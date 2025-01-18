@@ -175,3 +175,21 @@ export async function getBouquetByFilter(filter) {
     throw new Error(error.message);
   }
 }
+
+export async function searchBouquetsByKeyword(searchQuery) {
+  try {
+    const response = await fetch(
+      `${API_URL}/bouquet/searchByKeyword?searchQuery=${searchQuery}`
+    );
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error("Error al buscar bouquets:", error.message);
+    throw error;
+  }
+}

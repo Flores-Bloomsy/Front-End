@@ -29,7 +29,7 @@ export default function PaypalButton({
       totalPrice: Math.round(product.totalPrice * 100) / 100,
     }));
 
-    console.log({ formattedProducts });
+    //console.log({ formattedProducts });
     const orderData = {
       customerId,
       orderNumber,

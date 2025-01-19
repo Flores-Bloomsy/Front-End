@@ -3,6 +3,7 @@ import Link from "next/link";
 import WalletOutlinedIcon from "@mui/icons-material/WalletOutlined";
 import { getOrdersByUserId } from "@/utils/apiPlaceOrder";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 import {
   Box,
@@ -21,6 +22,9 @@ export default function OrderRegister() {
   const [orders, setOrders] = useState([]); // Estado para almacenar las órdenes
   const [loading, setLoading] = useState(true); // Estado para el estado de carga
   const [error, setError] = useState(null); // Estado para manejar los errores
+
+  const router = useRouter();
+  const { id } = router.query;
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -184,7 +188,7 @@ export default function OrderRegister() {
                   }}
                 >
                   <Link
-                    href={`/orders/${order.customerId}`}
+                    href={`/orders/${order._id}`}
                     style={{ textDecoration: "underline" }}
                   >
                     Ver orden

@@ -75,6 +75,7 @@ function OrderCheckout() {
 
     // Redirige usando el número de orden
     const orderNumber = resp.data.data._id;
+
     console.log("soy resp", orderNumber); // Verifica qué contiene `resp`
     if (orderNumber) {
       router.push(`/orders/${orderNumber}`);

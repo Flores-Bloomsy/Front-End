@@ -26,7 +26,6 @@ export const placeOrder = async (shipping, items) => {
     shippingAddress,
     totalAmount: items.reduce((sum, item) => sum + item.totalPrice, 0),
     paypalTransactionId: items.paypalTransactionId,
-    customMessage: "Por favor, entregar por la mañana",
     orderStatus: items.orderStatus,
   };
 

@@ -4,7 +4,7 @@ import UserDataFormCard from "@/components/profileConfig/UserDataFormCard";
 import { Container, Divider } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { checkoutSchema } from "@/utils/destinationSchema";
 import Title from "@/components/cart/Title";
 import { useRouter } from "next/router";

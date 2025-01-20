@@ -20,12 +20,15 @@ import Image from "next/image";
 import { getLatestOrder } from "@/utils/apiPlaceOrder";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import WriteCustomMessage from "@/components/WriteCustomMessage";
 
 function PayOrder() {
+  const [openWriteMessage, setOpenWriteMessage] = useState(false);
   const router = useRouter();
   const { id } = router.query;
 
   const [latestOrder, setLatestOrder] = useState(null);
+  console.log("orden", latestOrder);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -56,6 +59,14 @@ function PayOrder() {
   };
 
   const { totalQuantity, totalPrice } = getOrderSummary();
+
+  function handleClick() {
+    setOpenWriteMessage(true);
+  }
+
+  function handleClose() {
+    setOpenWriteMessage(false);
+  }
 
   return (
     <Container
@@ -143,11 +154,21 @@ function PayOrder() {
                       style={{ fontSize: "1.05rem", fontWeight: "bold" }}
                     >{`$${item.totalPrice}`}</span>
                   </Box>
-
-                  <Box></Box>
                 </Grid>
               </Box>
             ))}
+            {!latestOrder.customMessage &&
+              latestOrder.paymentStatus === "COMPLETED" && (
+                <>
+                  <Button onClick={handleClick} variant="contained">
+                    Agregar Mensaje
+                  </Button>
+                  <WriteCustomMessage
+                    open={openWriteMessage}
+                    handleClose={handleClose}
+                  />
+                </>
+              )}
           </Grid>
           <Grid item xs={12} md={6}>
             {/**resumen del checkout */}

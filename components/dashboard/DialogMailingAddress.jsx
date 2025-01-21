@@ -68,25 +68,29 @@ export function DialogMailingAddress({ open, onClose, order }) {
               {item.value}
             </Typography>
           ))}
-          <Typography
-            sx={{
-              fontWeight: "bold",
-              color: "error.main",
-              backgroundColor: "rgba(255, 0, 0, 0.1)",
-              padding: "8px",
-              borderRadius: "4px",
-              mb: 1,
-            }}
-          >
-            ** No olvides imprimir el QR y adjuntarlo al paquete **
-          </Typography>
-          <Button
-            sx={{ width: "fit-content" }}
-            variant="contained"
-            onClick={handlePrintQR}
-          >
-            Ver e Imprimir QR
-          </Button>
+          {order?.qrCode && (
+            <>
+              <Typography
+                sx={{
+                  fontWeight: "bold",
+                  color: "error.main",
+                  backgroundColor: "rgba(255, 0, 0, 0.1)",
+                  padding: "8px",
+                  borderRadius: "4px",
+                  mb: 1,
+                }}
+              >
+                ** No olvides imprimir el QR y adjuntarlo al paquete **
+              </Typography>
+              <Button
+                sx={{ width: "fit-content" }}
+                variant="contained"
+                onClick={handlePrintQR}
+              >
+                Ver e Imprimir QR
+              </Button>
+            </>
+          )}
           {showQRDialog && (
             <PrintQR
               open={showQRDialog}

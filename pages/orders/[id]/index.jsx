@@ -23,29 +23,20 @@ import Link from "next/link";
 import WriteCustomMessage from "@/components/WriteCustomMessage";
 
 function PayOrder() {
+  const [latestOrder, setLatestOrder] = useState(null);
   const [openWriteMessage, setOpenWriteMessage] = useState(false);
   const router = useRouter();
   const { id } = router.query;
 
-  const [latestOrder, setLatestOrder] = useState(null);
-<<<<<<< HEAD
-  console.log("orden", latestOrder);
-=======
   // console.log("id latestorder", latestOrder);
->>>>>>> develop
 
   useEffect(() => {
     const fetchOrder = async () => {
       const order = await getOrderById(id);
 
-<<<<<<< HEAD
-      setLatestOrder(order?.data);
-=======
-      setLatestOrder(order.data);
->>>>>>> develop
+      setLatestOrder(order);
     };
-
-    fetchOrder();
+    if (id) fetchOrder();
   }, [id]);
 
   if (!latestOrder) {
@@ -57,13 +48,10 @@ function PayOrder() {
   //   let totalQuantity = 0;
   //   let totalPrice = 0;
 
-<<<<<<< HEAD
-=======
   // const getOrderSummary = () => {
   //   let totalQuantity = 0;
   //   let totalPrice = 0;
 
->>>>>>> develop
   //   latestOrder.products.forEach((item) => {
   //     totalQuantity += item.quantity;
   //     totalPrice += item.price * item.quantity;

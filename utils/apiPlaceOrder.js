@@ -26,7 +26,6 @@ export const placeOrder = async (shipping, items) => {
     shippingAddress,
     totalAmount: items.reduce((sum, item) => sum + item.totalPrice, 0),
     paypalTransactionId: items.paypalTransactionId,
-    customMessage: "Por favor, entregar por la mañana",
     orderStatus: items.orderStatus,
   };
 
@@ -70,7 +69,6 @@ const sendOrderToServer = async (payload) => {
 };
 
 //traer ultima orden
-
 export const getLatestOrder = async () => {
   const token = localStorage.getItem("Token");
   try {
@@ -108,6 +106,36 @@ export const getLatestOrder = async () => {
   }
 };
 
+//traer orden expesifica por id
+export const getOrderById = async (orderId) => {
+  //console.log("order getOrderByid", orderId);
+  const token = localStorage.getItem("Token");
+  //console.log({ token });
+  try {
+    const res = await fetch(`${API_URL}/order/order-by-id/${orderId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // console.log("res de getOrderId", res);
+
+    if (!res.ok) {
+      throw new Error("Error al obtener los detalles de la orden");
+    }
+
+    const data = await res.json();
+
+    //console.log("res de data", data);
+    return data.data;
+  } catch (error) {
+    console.error("Error al obtener la orden por ID:", error);
+    return null;
+  }
+};
+
 // traer todas las ordenes del usuario
 
 export const getOrdersByUserId = async () => {
@@ -129,7 +157,7 @@ export const getOrdersByUserId = async () => {
     // Obtenemos los datos de la respuesta
     const data = await res.json();
 
-    console.log("usuario", data);
+    //console.log("usuario", data);
 
     // Si no hay órdenes, lanzamos un error
     if (!data.success || !data.data || data.data.length === 0) {

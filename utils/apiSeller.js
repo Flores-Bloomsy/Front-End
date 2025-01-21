@@ -83,7 +83,7 @@ export async function getUserById(userId, userRole) {
         ? `${API_URL}/auth/${userId}`
         : `${API_URL}/userseller/${userId}`;
 
-    console.log(url);
+    // console.log(url);
 
     const response = await fetch(url);
 
@@ -114,8 +114,9 @@ export async function getOrdersForSeller() {
       const errorData = await response.json();
       throw new Error(errorData.message || "Something went wrong");
     }
-
+    console.log("response", response);
     const data = await response.json();
+    console.log("data", data);
 
     return data.data;
   } catch (error) {

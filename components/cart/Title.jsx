@@ -14,6 +14,7 @@ function Title({ title, subtitle, sx }) {
           },
           fontWeight: 600,
           my: "1rem",
+          ...sx,
         }}
       >
         {title}

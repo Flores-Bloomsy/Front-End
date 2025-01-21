@@ -17,24 +17,26 @@ import theme from "@/theme";
 
 import Image from "next/image";
 
-import { getLatestOrder } from "@/utils/apiPlaceOrder";
+import { getOrderById } from "@/utils/apiPlaceOrder";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import WriteCustomMessage from "@/components/WriteCustomMessage";
 
 function PayOrder() {
+  const [latestOrder, setLatestOrder] = useState(null);
+  const [openWriteMessage, setOpenWriteMessage] = useState(false);
   const router = useRouter();
   const { id } = router.query;
 
-  const [latestOrder, setLatestOrder] = useState(null);
+  // console.log("id latestorder", latestOrder);
 
   useEffect(() => {
     const fetchOrder = async () => {
-      const order = await getLatestOrder(id);
+      const order = await getOrderById(id);
 
       setLatestOrder(order);
     };
-
-    fetchOrder();
+    if (id) fetchOrder();
   }, [id]);
 
   if (!latestOrder) {
@@ -42,8 +44,26 @@ function PayOrder() {
   }
 
   // console.log("ultima orden", latestOrder);
+  // const getOrderSummary = () => {
+  //   let totalQuantity = 0;
+  //   let totalPrice = 0;
 
+  // const getOrderSummary = () => {
+  //   let totalQuantity = 0;
+  //   let totalPrice = 0;
+
+  //   latestOrder.products.forEach((item) => {
+  //     totalQuantity += item.quantity;
+  //     totalPrice += item.price * item.quantity;
+  //   });
+
+  //   return { totalQuantity, totalPrice };
+  // };
   const getOrderSummary = () => {
+    if (!latestOrder || !latestOrder.data) {
+      return { totalQuantity: 0, totalPrice: 0 };
+    }
+
     let totalQuantity = 0;
     let totalPrice = 0;
 
@@ -56,6 +76,14 @@ function PayOrder() {
   };
 
   const { totalQuantity, totalPrice } = getOrderSummary();
+
+  function handleClick() {
+    setOpenWriteMessage(true);
+  }
+
+  function handleClose() {
+    setOpenWriteMessage(false);
+  }
 
   return (
     <Container
@@ -143,11 +171,21 @@ function PayOrder() {
                       style={{ fontSize: "1.05rem", fontWeight: "bold" }}
                     >{`$${item.totalPrice}`}</span>
                   </Box>
-
-                  <Box></Box>
                 </Grid>
               </Box>
             ))}
+            {!latestOrder.customMessage &&
+              latestOrder.paymentStatus === "COMPLETED" && (
+                <>
+                  <Button onClick={handleClick} variant="contained">
+                    Agregar Mensaje
+                  </Button>
+                  <WriteCustomMessage
+                    open={openWriteMessage}
+                    handleClose={handleClose}
+                  />
+                </>
+              )}
           </Grid>
           <Grid item xs={12} md={6}>
             {/**resumen del checkout */}

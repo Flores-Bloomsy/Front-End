@@ -45,7 +45,7 @@ const RedirectSellerButton = () => {
 
       // Si la solicitud es exitosa, puedes hacer algo con la respuesta
       const data = await response.json();
-      console.log("Respuesta del backend:", data);
+      //console.log("Respuesta del backend:", data);
 
       // Aquí manejamos la redirección a la URL de PayPal
 
@@ -75,7 +75,7 @@ const RedirectSellerButton = () => {
       }}
     >
       <Button onClick={handleRedirect} disabled={isLoading}>
-        {isLoading ? "Cargando..." : "Completar Integración con PayPal"}
+        {isLoading ? "Cargando..." : "Completar Integración con PayPal Aqui"}
       </Button>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </Container>

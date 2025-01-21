@@ -47,7 +47,7 @@ export const fetchCartItems = async (setCartItems, setLoading) => {
 //incrmentar el producto del carrito
 export const handleIncrement = async (itemId, cartItems, setCartItems) => {
   const token = localStorage.getItem("Token");
-  console.log("itemId enviado:", itemId);
+  //console.log("itemId enviado:", itemId);
 
   // Buscar el producto en el carrito
   const updatedCartItems = cartItems.map((item) =>
@@ -55,7 +55,7 @@ export const handleIncrement = async (itemId, cartItems, setCartItems) => {
       ? { ...item, quantity: item.quantity + 1 }
       : item
   );
-  console.log("actualizar data", updatedCartItems);
+  // console.log("actualizar data", updatedCartItems);
 
   setCartItems(updatedCartItems); // Actualizamos el estado localmente
 
@@ -74,10 +74,10 @@ export const handleIncrement = async (itemId, cartItems, setCartItems) => {
         ).quantity, // Nueva cantidad
       }),
     });
-    console.log("soy response", response);
+    // console.log("soy response", response);
 
     const data = await response.json();
-    console.log("soy data de", data);
+    //console.log("soy data de", data);
     if (!data.success) {
       throw new Error("Error al actualizar la cantidad");
     }

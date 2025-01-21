@@ -28,3 +28,20 @@ export async function addCustomMessageById(orderId, message) {
     throw new Error(error.message);
   }
 }
+
+export async function getCustomMessageById(id) {
+  try {
+    const response = await fetch(`${API_URL}/order/get-custom-message/${id}`);
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Something went wrong");
+    }
+
+    const data = await response.json();
+    console.log("data", data);
+    return data.data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}

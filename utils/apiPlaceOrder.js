@@ -107,6 +107,36 @@ export const getLatestOrder = async () => {
   }
 };
 
+//traer orden expesifica por id
+export const getOrderById = async (orderId) => {
+  //console.log("order getOrderByid", orderId);
+  const token = localStorage.getItem("Token");
+  //console.log({ token });
+  try {
+    const res = await fetch(`${API_URL}/order/${orderId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // console.log("res de getOrderId", res);
+
+    if (!res.ok) {
+      throw new Error("Error al obtener los detalles de la orden");
+    }
+
+    const data = await res.json();
+
+    //console.log("res de data", data);
+    return data;
+  } catch (error) {
+    console.error("Error al obtener la orden por ID:", error);
+    return null;
+  }
+};
+
 // traer todas las ordenes del usuario
 
 export const getOrdersByUserId = async () => {

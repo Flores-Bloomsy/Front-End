@@ -26,6 +26,7 @@ export default function WriteCustomMessage({ open, handleClose }) {
     useFileUpload();
   const router = useRouter();
   const { id } = router.query;
+  console.log("ssss", id);
   const formats = ["header", "image", "color", "italic", "font"];
 
   const handleImageUpload = useCallback(() => {

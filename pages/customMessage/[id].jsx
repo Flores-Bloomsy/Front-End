@@ -1,8 +1,27 @@
+import { getCustomMessageById } from "@/utils/apiCustomMessage";
 import { Container, Box } from "@mui/material";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function CustomMessagePage() {
-  const htmlContent =
-    '></p><p>nonononnonononon</p><p><br></p><p><img src="https://bloomshy.s3.amazonaws.com/uploads/BloomAndBits/descarga-3-.webp"></p>';
+  const [customMessage, setCustomMessage] = useState(null);
+  const router = useRouter();
+  const { id } = router.query;
+  console.log("id", id);
+
+  useEffect(() => {
+    async function getMessage() {
+      if (!id) {
+        console.log("ID aún no está disponible");
+        return;
+      }
+      const message = await getCustomMessageById(id);
+      setCustomMessage(message);
+    }
+    getMessage();
+  }, [id]);
+  console.log("customMessage", customMessage);
+
   return (
     <Container
       maxWidth
@@ -12,12 +31,12 @@ export default function CustomMessagePage() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        overflow: "auto", // Permite el scroll del contenido
+        overflow: "auto",
       }}
     >
       <Box
         sx={{
-          position: "fixed", // El fondo se mantendrá fijo
+          position: "fixed",
           top: 0,
           left: 0,
           right: 0,
@@ -33,7 +52,7 @@ export default function CustomMessagePage() {
         sx={{
           zIndex: 1,
         }}
-        dangerouslySetInnerHTML={{ __html: htmlContent }}
+        dangerouslySetInnerHTML={{ __html: customMessage }}
       />
     </Container>
   );

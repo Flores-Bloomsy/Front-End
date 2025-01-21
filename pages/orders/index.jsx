@@ -184,7 +184,7 @@ export default function OrderRegister() {
                   }}
                 >
                   <Link
-                    href={`/orders/${order.customerId}`}
+                    href={`/orders/${order._id}`}
                     style={{ textDecoration: "underline" }}
                   >
                     Ver orden

@@ -1,4 +1,4 @@
-import { KeyboardBackspace } from "@mui/icons-material";
+import { KeyboardBackspace, StayPrimaryLandscape } from "@mui/icons-material";
 import { FormHelperText, Radio, Typography } from "@mui/material";
 import ButtonAddProduct from "@/components/addProduct/Button";
 import { useForm, Controller } from "react-hook-form";
@@ -21,6 +21,8 @@ import {
   Checkbox,
   Divider,
 } from "@mui/material";
+import PaypalMerchanId from "@/components/paypal/PaypalMerchanId";
+import Link from "next/link";
 
 function AddProduct() {
   const { isUploadingFile, imageUrl, onFileInputChange, resetImageUrl } =
@@ -38,9 +40,8 @@ function AddProduct() {
     resolver: yupResolver(validationSchema),
   });
 
-  const [image, setImage] = useState(null);
   const [token, setToken] = useState(null);
-  const [imageName, setImageName] = useState("");
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
@@ -137,6 +138,7 @@ function AddProduct() {
 
   return (
     <Container>
+      <PaypalMerchanId />
       <Box
         sx={{
           display: "flex",
@@ -148,6 +150,8 @@ function AddProduct() {
       >
         <Box>
           <Box
+            component={Link}
+            href={"/dashboard"}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -166,6 +170,7 @@ function AddProduct() {
                 fontSize: "18px",
               }}
             />
+
             <Typography
               variant="body1"
               sx={{

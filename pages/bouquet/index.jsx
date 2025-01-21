@@ -22,7 +22,7 @@ export default function Bouquets({ bouquets }) {
     flowerType: [],
     personality: [],
   });
-  console.log(filters);
+  //console.log(filters);
   //actualiza los filtros cuando la url cambia
   useEffect(() => {
     const newFilters = { ...filters };
@@ -88,7 +88,7 @@ export default function Bouquets({ bouquets }) {
 
     return true; // Solo pasa si cumple todas las condiciones
   });
-  console.log(filteredBouquets);
+  //console.log(filteredBouquets);
 
   return (
     <Container

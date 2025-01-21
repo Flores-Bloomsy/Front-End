@@ -8,7 +8,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { Box, Divider, OutlinedInput, Typography } from "@mui/material";
 
 import { opciones } from "@/utils/arrayCheckbox";
-console.log(Object.entries(opciones));
+//console.log(Object.entries(opciones));
 
 const icon = (
   <CheckBoxOutlineBlankIcon fontSize="small" sx={{ color: "#FF7957" }} />

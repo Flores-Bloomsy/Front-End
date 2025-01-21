@@ -17,7 +17,7 @@ import theme from "@/theme";
 
 import Image from "next/image";
 
-import { getLatestOrder } from "@/utils/apiPlaceOrder";
+import { getOrderById } from "@/utils/apiPlaceOrder";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -26,12 +26,13 @@ function PayOrder() {
   const { id } = router.query;
 
   const [latestOrder, setLatestOrder] = useState(null);
+  // console.log("id latestorder", latestOrder);
 
   useEffect(() => {
     const fetchOrder = async () => {
-      const order = await getLatestOrder(id);
+      const order = await getOrderById(id);
 
-      setLatestOrder(order);
+      setLatestOrder(order.data);
     };
 
     fetchOrder();
@@ -43,7 +44,22 @@ function PayOrder() {
 
   // console.log("ultima orden", latestOrder);
 
+  // const getOrderSummary = () => {
+  //   let totalQuantity = 0;
+  //   let totalPrice = 0;
+
+  //   latestOrder.products.forEach((item) => {
+  //     totalQuantity += item.quantity;
+  //     totalPrice += item.price * item.quantity;
+  //   });
+
+  //   return { totalQuantity, totalPrice };
+  // };
   const getOrderSummary = () => {
+    if (!latestOrder || !latestOrder.data) {
+      return { totalQuantity: 0, totalPrice: 0 };
+    }
+
     let totalQuantity = 0;
     let totalPrice = 0;
 

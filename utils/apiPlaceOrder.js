@@ -69,7 +69,6 @@ const sendOrderToServer = async (payload) => {
 };
 
 //traer ultima orden
-
 export const getLatestOrder = async () => {
   const token = localStorage.getItem("Token");
   try {
@@ -158,7 +157,7 @@ export const getOrdersByUserId = async () => {
     // Obtenemos los datos de la respuesta
     const data = await res.json();
 
-    console.log("usuario", data);
+    //console.log("usuario", data);
 
     // Si no hay órdenes, lanzamos un error
     if (!data.success || !data.data || data.data.length === 0) {

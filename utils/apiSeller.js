@@ -83,7 +83,7 @@ export async function getUserById(userId, userRole) {
         ? `${API_URL}/auth/${userId}`
         : `${API_URL}/userseller/${userId}`;
 
-    console.log(url);
+    // console.log(url);
 
     const response = await fetch(url);
 

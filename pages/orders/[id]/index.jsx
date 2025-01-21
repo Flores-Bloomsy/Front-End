@@ -28,13 +28,21 @@ function PayOrder() {
   const { id } = router.query;
 
   const [latestOrder, setLatestOrder] = useState(null);
+<<<<<<< HEAD
   console.log("orden", latestOrder);
+=======
+  // console.log("id latestorder", latestOrder);
+>>>>>>> develop
 
   useEffect(() => {
     const fetchOrder = async () => {
       const order = await getOrderById(id);
 
+<<<<<<< HEAD
       setLatestOrder(order?.data);
+=======
+      setLatestOrder(order.data);
+>>>>>>> develop
     };
 
     fetchOrder();
@@ -49,6 +57,13 @@ function PayOrder() {
   //   let totalQuantity = 0;
   //   let totalPrice = 0;
 
+<<<<<<< HEAD
+=======
+  // const getOrderSummary = () => {
+  //   let totalQuantity = 0;
+  //   let totalPrice = 0;
+
+>>>>>>> develop
   //   latestOrder.products.forEach((item) => {
   //     totalQuantity += item.quantity;
   //     totalPrice += item.price * item.quantity;

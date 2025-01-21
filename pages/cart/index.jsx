@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 
 import Title from "@/components/cart/Title";
+
 import {
   fetchCartItems,
   handleIncrement,
@@ -28,7 +29,7 @@ function CartPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  console.log("cart", cartItems);
+  //console.log("cart", cartItems);
 
   const checkCartEmpty = () => {
     if (cartItems.length === 0) {

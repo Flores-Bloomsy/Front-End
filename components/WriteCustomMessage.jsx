@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { addCustomMessageById } from "@/utils/apiCustomMessage";
 import { useRouter } from "next/router";
-import Cursor from "quill/blots/cursor";
 
 // Carga dinámica de ReactQuill solo en el cliente
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -57,7 +56,6 @@ export default function WriteCustomMessage({ open, handleClose }) {
 
     if (!hasImageInContent(value)) {
       const imageHTML = `<img src="${imageUrl}" alt="Imagen subida" />`;
-      console.log("11", imageHTML);
       setValue((prevValue) => `${prevValue}${imageHTML}`);
       setImageAdded(true);
     }

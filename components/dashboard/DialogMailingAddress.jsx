@@ -1,8 +1,6 @@
 import { decodeToken } from "@/utils/decodeToken";
 import {
-  Card,
-  CardContent,
-  CardMedia,
+  Button,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -11,9 +9,12 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ProductCard } from "./seller/ProductCard";
+import PrintQR from "./PrintQR";
 
 export function DialogMailingAddress({ open, onClose, order }) {
   const [token, setToken] = useState(null);
+  const [showQRDialog, setShowQRDialog] = useState(false);
+  console.log("orden", order?.qrCode);
 
   const mailingAddres = [
     { label: "Recibe", value: order?.shippingAddress?.name },
@@ -36,6 +37,13 @@ export function DialogMailingAddress({ open, onClose, order }) {
     setToken(decodedLocalToken);
   }, []);
 
+  function handlePrintQR() {
+    setShowQRDialog(true);
+  }
+
+  function handleCloseQRDialog() {
+    setShowQRDialog(false);
+  }
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>Informacion del Pedido</DialogTitle>
@@ -60,6 +68,36 @@ export function DialogMailingAddress({ open, onClose, order }) {
               {item.value}
             </Typography>
           ))}
+          {order?.qrCode && (
+            <>
+              <Typography
+                sx={{
+                  fontWeight: "bold",
+                  color: "error.main",
+                  backgroundColor: "rgba(255, 0, 0, 0.1)",
+                  padding: "8px",
+                  borderRadius: "4px",
+                  mb: 1,
+                }}
+              >
+                ** No olvides imprimir el QR y adjuntarlo al paquete **
+              </Typography>
+              <Button
+                sx={{ width: "fit-content" }}
+                variant="contained"
+                onClick={handlePrintQR}
+              >
+                Ver e Imprimir QR
+              </Button>
+            </>
+          )}
+          {showQRDialog && (
+            <PrintQR
+              open={showQRDialog}
+              onClose={handleCloseQRDialog}
+              qrCode={order?.qrCode}
+            />
+          )}
         </Stack>
         <Stack spacing={1}>
           <Typography variant="h4">Productos a Enviar</Typography>

@@ -71,7 +71,7 @@ export default function Orders() {
               <TableCell>Fecha</TableCell>
               <TableCell>Comprador</TableCell>
               <TableCell>Estado del Pago</TableCell>
-              <TableCell>Estado del Envio</TableCell>
+              {/* <TableCell>Estado del Envio</TableCell> */}
               <TableCell>Total</TableCell>
               <TableCell align="center">Opciones</TableCell>
             </TableRow>
@@ -83,7 +83,7 @@ export default function Orders() {
                 <TableCell>{formatDate(order.createdAt)}</TableCell>
                 <TableCell>{order.customerId}</TableCell>
                 <TableCell>{order.paymentStatus}</TableCell>
-                <TableCell>{order.orderStatus}</TableCell>
+                {/* <TableCell>{order.orderStatus}</TableCell> */}
                 <TableCell>{`$ ${order.totalAmount}`}</TableCell>
                 <TableCell align="center">
                   <Button onClick={(e) => handleMenuOpen(e, order)}>

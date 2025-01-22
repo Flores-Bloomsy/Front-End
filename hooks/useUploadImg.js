@@ -61,8 +61,8 @@ export function useFileUpload() {
 
   return {
     isUploadingFile,
-    imageUrl,
-    onFileInputChange,
+    imageUrl, //esto regresa la url
+    onFileInputChange, //esto se coloca en un onchange para subir la imagen
     resetImageUrl,
   };
 }

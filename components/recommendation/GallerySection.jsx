@@ -2,7 +2,6 @@ import { Box, Grid2, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import BtnComprarCart from "../bouquets/BtnComprarCart";
 import Link from "next/link";
-import zIndex from "@mui/material/styles/zIndex";
 
 export default function GallerySection({ bouquets }) {
   console.log("de aqui", bouquets);

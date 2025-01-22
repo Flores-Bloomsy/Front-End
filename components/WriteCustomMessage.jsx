@@ -19,14 +19,14 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 export default function WriteCustomMessage({ open, handleClose }) {
   const [value, setValue] = useState("");
-  console.log(value);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [imageAdded, setImageAdded] = useState(false);
   const fileInputRef = useRef(null);
   const { onFileInputChange, imageUrl, resetImageUrl, isUploadingFile } =
     useFileUpload();
   const router = useRouter();
   const { id } = router.query;
-  console.log("ssss", id);
   const formats = ["header", "image", "color", "italic", "font"];
 
   const handleImageUpload = useCallback(() => {
@@ -56,7 +56,6 @@ export default function WriteCustomMessage({ open, handleClose }) {
 
     if (!hasImageInContent(value)) {
       const imageHTML = `<img src="${imageUrl}" alt="Imagen subida" />`;
-      console.log("11", imageHTML);
       setValue((prevValue) => `${prevValue}${imageHTML}`);
       setImageAdded(true);
     }
@@ -71,9 +70,10 @@ export default function WriteCustomMessage({ open, handleClose }) {
   }, [value]);
 
   async function handleSendMessage() {
-    const res = await addCustomMessageById(id, { customMessage: value });
+    setIsSubmitting(true);
+    await addCustomMessageById(id, { customMessage: value });
 
-    console.log("123123132", res);
+    setIsSubmitting(false);
     router.reload();
   }
 
@@ -91,8 +91,13 @@ export default function WriteCustomMessage({ open, handleClose }) {
         </Typography>
       </DialogTitle>
       <DialogContent>
-        <Typography align="right" color={imageAdded && "error"}>
-          Elige una imagen especial.
+        <Typography
+          sx={{ cursor: "pointer" }}
+          onClick={handleImageUpload}
+          align="right"
+          color={imageAdded && "error"}
+        >
+          Agrega una imagen para poder guardar.
         </Typography>
         <input
           disabled={isUploadingFile || imageAdded}
@@ -114,11 +119,20 @@ export default function WriteCustomMessage({ open, handleClose }) {
         {isUploadingFile && (
           <Typography color="error">Subiendo imagen...</Typography>
         )}
+        {isSubmitting && (
+          <Typography color="error">Guardando mensaje...</Typography>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancelar</Button>
-        <Button onClick={handleSendMessage} variant="contained">
-          Enviar
+        <Button
+          disabled={
+            !value.trim() || isUploadingFile || !imageAdded || isSubmitting
+          }
+          onClick={handleSendMessage}
+          variant="contained"
+        >
+          Guardar
         </Button>
       </DialogActions>
     </Dialog>

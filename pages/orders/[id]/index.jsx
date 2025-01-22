@@ -43,24 +43,8 @@ function PayOrder() {
     return <p>Cargando la última orden...</p>;
   }
 
-  // console.log("ultima orden", latestOrder);
-  // const getOrderSummary = () => {
-  //   let totalQuantity = 0;
-  //   let totalPrice = 0;
-
-  // const getOrderSummary = () => {
-  //   let totalQuantity = 0;
-  //   let totalPrice = 0;
-
-  //   latestOrder.products.forEach((item) => {
-  //     totalQuantity += item.quantity;
-  //     totalPrice += item.price * item.quantity;
-  //   });
-
-  //   return { totalQuantity, totalPrice };
-  // };
   const getOrderSummary = () => {
-    if (!latestOrder || !latestOrder.data) {
+    if (!latestOrder || !latestOrder.products) {
       return { totalQuantity: 0, totalPrice: 0 };
     }
 
@@ -76,6 +60,7 @@ function PayOrder() {
   };
 
   const { totalQuantity, totalPrice } = getOrderSummary();
+  console.log({ totalPrice, totalQuantity });
 
   function handleClick() {
     setOpenWriteMessage(true);

@@ -18,7 +18,7 @@
     "@uppy/core": "^2.3.4",
     "@uppy/react": "^2.2.3",
     "@uppy/transloadit": "^2.3.7",
-    "next": "14.2.18",
+    "next": "14.2.21",
     "notistack": "^3.0.1",
     "quill": "^2.0.3",
     "react": "^18",

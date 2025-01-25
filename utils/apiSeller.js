@@ -1,7 +1,7 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function SignupUserSeller(email, password) {
-  console.log("Datos enviados:", { email, password });
+  //console.log("Datos enviados:", { email, password });
   const response = await fetch(`${API_URL}/userseller`, {
     method: "POST",
     headers: {

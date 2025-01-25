@@ -9,6 +9,7 @@ import ToggleLineButtons from "@/components/ToggleLineButtons";
 import { Login } from "../../utils/api";
 import { useSnackbar } from "notistack";
 import ImageContainer from "@/components/ImageContainer";
+import GoogleLoginButton from "@/components/googleAuth/ButtonGoogle";
 
 export default function HandleLogin() {
   const theme = useTheme();
@@ -256,6 +257,7 @@ export default function HandleLogin() {
                   {errorMessage}
                 </Typography>
               )}
+              <GoogleLoginButton />
 
               <Button
                 type="submit"

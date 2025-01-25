@@ -10,6 +10,7 @@ import ToggleLineButtons from "@/components/ToggleLineButtons";
 import { SignupUserSeller } from "../../utils/apiSeller";
 import { useSnackbar } from "notistack";
 import ImageContainer from "@/components/ImageContainer";
+import GoogleLoginButtonSeller from "@/components/googleAuth/ButtonGoogleSeller";
 
 export default function SellerRegister() {
   const theme = useTheme();
@@ -274,6 +275,8 @@ export default function SellerRegister() {
                   {errorMessage}
                 </Typography>
               )}
+
+              <GoogleLoginButtonSeller />
 
               <Button
                 type="submit"

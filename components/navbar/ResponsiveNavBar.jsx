@@ -111,11 +111,22 @@ export default function ResponsiveNavBar() {
   function handleClose() {
     setAnchorEl(null);
   }
+
   function handleLogout() {
+    if (window.google) {
+      google.accounts.id.revoke(localStorage.getItem("email"), () => {
+        console.log("Sesión de Google revocada.");
+      });
+
+      google.accounts.id.disableAutoSelect();
+    }
     localStorage.removeItem("Token");
+    localStorage.removeItem("email");
     localStorage.removeItem(`user_${user._id}_${user.rol}`);
 
     setUser(null);
+
+    router.push("/register-user/login");
   }
 
   useEffect(() => {

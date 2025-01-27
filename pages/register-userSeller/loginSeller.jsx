@@ -9,6 +9,7 @@ import ToggleLineButtons from "@/components/ToggleLineButtons";
 import { LoginUserSeller } from "../../utils/apiSeller";
 import { useSnackbar } from "notistack";
 import ImageContainer from "@/components/ImageContainer";
+import GoogleLoginButtonSeller from "@/components/googleAuth/ButtonGoogleSeller";
 
 export default function LoginSeller() {
   const theme = useTheme();
@@ -239,7 +240,7 @@ export default function LoginSeller() {
                   },
                 }}
               />
-
+              <GoogleLoginButtonSeller />
               {errorMessage && (
                 <Typography
                   variant="body2"

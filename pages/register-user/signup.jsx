@@ -10,6 +10,7 @@ import ToggleLineButtons from "@/components/ToggleLineButtons";
 import { Signup } from "../../utils/api";
 import { useSnackbar } from "notistack";
 import ImageContainer from "@/components/ImageContainer";
+import GoogleLoginButton from "@/components/googleAuth/ButtonGoogle";
 
 export default function Register() {
   const theme = useTheme();
@@ -273,6 +274,7 @@ export default function Register() {
                   {errorMessage}
                 </Typography>
               )}
+              <GoogleLoginButton />
 
               <Button
                 type="submit"

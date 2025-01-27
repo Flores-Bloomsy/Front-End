@@ -21,7 +21,6 @@ import { useRouter } from "next/router";
 
 function OrderCheckout() {
   const [cartItems, setCartItems] = useState([]);
-
   const [loading, setLoading] = useState(true);
   const [isPlaceOrder, setIsPlaceOrder] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -57,6 +56,7 @@ function OrderCheckout() {
   };
 
   const onPlaceOrder = async () => {
+    setIsPlaceOrder(true);
     const resp = await placeOrder(shippingInfo, cartItems);
 
     if (!resp.ok) {

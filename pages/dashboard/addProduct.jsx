@@ -25,6 +25,11 @@ import PaypalMerchanId from "@/components/paypal/PaypalMerchanId";
 import Link from "next/link";
 
 function AddProduct() {
+  const [token, setToken] = useState(null);
+  const [showButton, setShowButton] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
   const { isUploadingFile, imageUrl, onFileInputChange, resetImageUrl } =
     useFileUpload();
 
@@ -39,12 +44,6 @@ function AddProduct() {
   } = useForm({
     resolver: yupResolver(validationSchema),
   });
-
-  const [token, setToken] = useState(null);
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
-  const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("Token");
@@ -88,8 +87,6 @@ function AddProduct() {
 
         reset();
         resetImageUrl();
-        // setImage(null);
-        // setImageName("");
       } else {
         enqueueSnackbar("Hubo un error al crear el producto", {
           variant: "error",
@@ -101,8 +98,6 @@ function AddProduct() {
 
       reset();
       resetImageUrl();
-      // setImage(null);
-      // setImageName("");
     } catch (error) {
       console.error("Error al enviar el producto", error);
     } finally {
@@ -136,9 +131,13 @@ function AddProduct() {
     reset();
   };
 
+  const handleShowButtonChange = (newState) => {
+    setShowButton(newState);
+  };
+
   return (
     <Container>
-      <PaypalMerchanId />
+      <PaypalMerchanId onShowButtonChange={handleShowButtonChange} />
       <Box
         sx={{
           display: "flex",
@@ -209,9 +208,11 @@ function AddProduct() {
           </ButtonAddProduct>
 
           <ButtonAddProduct
-            sx={{ backgroundColor: "#9C2E3A", color: "white" }}
+            sx={{ backgroundColor: "primary.main", color: "white" }}
             onClick={handleSubmit(onSubmit)}
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting || isUploadingFile || showButton || !imageUrl
+            }
           >
             {isSubmitting ? "Enviando..." : "Guardar"}
           </ButtonAddProduct>
@@ -280,7 +281,7 @@ function AddProduct() {
                     justifyContent: "center",
                     position: "relative",
                     cursor: "pointer",
-                    border: "2px dashed #000",
+                    border: `2px dashed ${!imageUrl ? "#d32f2f" : "#000"}`,
                     backgroundImage: imageUrl ? `url(${imageUrl})` : "none",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
@@ -345,20 +346,19 @@ function AddProduct() {
                       Cambiar Imagen
                     </Typography>
                   )}
-                  {/* <Typography
+                </Box>
+                {!imageUrl && (
+                  <Typography
                     sx={{
-                      fontWeight: "bold",
-                      textAlign: "center",
-                      fontSize: 14,
-                      color: "primary.main",
-                      border: 1,
-                      p: 1,
-                      borderRadius: 1,
+                      ml: 1,
+                      fontSize: "0.75rem",
+                      color: "#d32f2f",
+                      lineHeight: "1.5rem",
                     }}
                   >
-                    Agregar Imagen
-                  </Typography> */}
-                </Box>
+                    Agrega una imagen
+                  </Typography>
+                )}
                 <Typography
                   variant="body1"
                   sx={{
@@ -484,9 +484,11 @@ function AddProduct() {
             </ButtonAddProduct>
 
             <ButtonAddProduct
-              sx={{ backgroundColor: "#9C2E3A", color: "white" }}
+              sx={{ backgroundColor: "primary.main", color: "white" }}
               onClick={handleSubmit(onSubmit)}
-              disabled={isSubmitting}
+              disabled={
+                isSubmitting || isUploadingFile || showButton || !imageUrl
+              }
             >
               {isSubmitting ? "Enviando..." : "Guardar"}
             </ButtonAddProduct>

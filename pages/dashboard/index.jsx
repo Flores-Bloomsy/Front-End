@@ -11,9 +11,9 @@ import MyAccount from "@/components/dashboard/seller/MyAccount";
 
 //dashboard usuario comprador
 import NavItemsSeller from "@/components/dashboard/seller/NavItemsSeller";
-import TrackOrder from "@/components/dashboard/buyer/TrackOrder";
+// import TrackOrder from "@/components/dashboard/buyer/TrackOrder";
 import MyOrders from "@/components/dashboard/buyer/MyOrders";
-import Favorites from "@/components/dashboard/buyer/Favorites";
+// import Favorites from "@/components/dashboard/buyer/Favorites";
 
 import { Container, Divider } from "@mui/material";
 import RedirectSellerButton from "./paypalRegister";
@@ -30,7 +30,6 @@ export default function Dashboard() {
         Ordenes: <Orders />,
         Productos: <Products />,
         "Mi Cuenta": <MyAccount />,
-        "Conectar paypal": <RedirectSellerButton />,
       },
       buyer: {
         "Mis Pedidos": <MyOrders />,

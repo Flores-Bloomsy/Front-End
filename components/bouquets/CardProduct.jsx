@@ -14,7 +14,7 @@ import Image from "next/image";
 
 export default function CardProduct({ props }) {
   return (
-    <Grid2 xs={12} sm={6} md={4} lg={4} size={{ xs: 12, sm: 6, md: 4, lg: 4 }}>
+    <Grid2 xs={6} sm={6} md={4} lg={4} size={{ xs: 6, sm: 6, md: 4, lg: 4 }}>
       <Card
         sx={{
           borderRadius: "0 25px 0 0",
@@ -51,7 +51,11 @@ export default function CardProduct({ props }) {
           <Link href={`bouquet/${props._id}`} underline="none">
             <Typography
               sx={{
-                fontSize: "1rem",
+                fontSize: {
+                  xs: "0.8rem",
+                  sm: "1rem",
+                  md: "1rem",
+                },
                 textAlign: "start",
               }}
             >
@@ -71,7 +75,15 @@ export default function CardProduct({ props }) {
             name={props.name}
             image={props.images[0]}
             texto={"comprar"}
-            sx={{ borderRadius: " 25px 0 25px 0", width: "100%" }}
+            sx={{
+              borderRadius: " 25px 0 25px 0",
+              width: "100%",
+              fontSize: {
+                xs: "0.6rem",
+                sm: "0.7rem",
+                md: "0.8rem",
+              },
+            }}
           />
           <BtnShopingCart
             productId={props._id}

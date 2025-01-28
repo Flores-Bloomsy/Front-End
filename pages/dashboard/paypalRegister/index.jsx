@@ -66,19 +66,16 @@ const RedirectSellerButton = () => {
   };
 
   return (
-    <Container
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "500px",
-      }}
-    >
-      <Button onClick={handleRedirect} disabled={isLoading}>
-        {isLoading ? "Cargando..." : "Completar Integración con PayPal Aqui"}
+    <>
+      <Button
+        sx={{ color: "blue", m: 0 }}
+        onClick={handleRedirect}
+        disabled={isLoading}
+      >
+        {isLoading ? "Cargando..." : "AQUI"}
       </Button>
       {error && <p style={{ color: "red" }}>{error}</p>}
-    </Container>
+    </>
   );
 };
 

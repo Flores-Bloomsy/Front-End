@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { getUserById } from "@/utils/apiSeller";
 import { Box } from "@mui/material";
-import Link from "next/link";
 import { decodeToken } from "@/utils/decodeToken";
+import RedirectSellerButton from "@/pages/dashboard/paypalRegister";
 
-export default function PaypalMerchanId() {
+export default function PaypalMerchanId({ onShowButtonChange }) {
   const [showButton, setShowButton] = useState(false);
   const [userId, setUserId] = useState(null);
   const [userRole, setUserRole] = useState(null);
@@ -35,12 +35,15 @@ export default function PaypalMerchanId() {
 
         if (!user?.paypalMerchantId) {
           setShowButton(true);
+          onShowButtonChange(true);
         } else {
           setShowButton(false);
+          onShowButtonChange(false);
         }
       } catch (error) {
         console.error("Error fetching user data:", error.message);
         setShowButton(false);
+        onShowButtonChange(false);
       }
     }
 
@@ -64,9 +67,8 @@ export default function PaypalMerchanId() {
           }}
         >
           ⚠️ Antes de agregar un pruductos te recomendamos que primero registres
-          tu cuenta bancaria{" "}
-          <Link href={"/dashboard/paypalRegister"}>AQUI</Link>
-          <br />
+          tu cuenta de paypal
+          <RedirectSellerButton />
           para que puedas recibir tus pagos
         </Box>
       )}

@@ -96,13 +96,7 @@ const GoogleLoginButtonSeller = () => {
             marginTop: 1,
           }}
         >
-          <Box
-            id="g_id_signin"
-            sx={{
-              width: "100%",
-              maxWidth: 300,
-            }}
-          ></Box>
+          <Box id="g_id_signin"></Box>
         </Box>
       )}
     </Box>

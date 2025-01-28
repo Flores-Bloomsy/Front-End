@@ -94,7 +94,6 @@ const GoogleLoginButtonSeller = () => {
             alignItems: "center",
             width: "100%",
             marginTop: 1,
-            marginLeft: 5,
           }}
         >
           <Box

@@ -8,7 +8,7 @@ const GoogleLoginButton = () => {
   const [loading, setLoading] = useState(false);
   // Función para manejar la respuesta de Google
   const handleCredentialResponse = async (response) => {
-    //console.log("Encoded JWT ID token: " + response.credential);
+    console.log("Encoded JWT ID token: " + response.credential);
     setLoading(true);
     try {
       const body = { id_token: response.credential };
@@ -78,7 +78,7 @@ const GoogleLoginButton = () => {
   }, []);
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box>
       {loading ? (
         <Box>Loading...</Box>
       ) : (
@@ -91,13 +91,7 @@ const GoogleLoginButton = () => {
             marginTop: 1,
           }}
         >
-          <Box
-            id="g_id_signin"
-            sx={{
-              width: "100%",
-              maxWidth: 300,
-            }}
-          ></Box>
+          <Box id="g_id_signin"></Box>
         </Box>
       )}
     </Box>

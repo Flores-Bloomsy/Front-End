@@ -78,7 +78,7 @@ const GoogleLoginButton = () => {
   }, []);
 
   return (
-    <Box>
+    <Box sx={{ width: "100%" }}>
       {loading ? (
         <Box>Loading...</Box>
       ) : (
@@ -89,7 +89,6 @@ const GoogleLoginButton = () => {
             alignItems: "center",
             width: "100%",
             marginTop: 1,
-            marginLeft: 5,
           }}
         >
           <Box

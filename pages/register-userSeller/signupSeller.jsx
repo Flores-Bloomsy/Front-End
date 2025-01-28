@@ -211,7 +211,11 @@ export default function SellerRegister() {
           >
             <form
               onSubmit={handleSubmit(onSubmit)}
-              style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+              }}
             >
               <InputField
                 name="email"

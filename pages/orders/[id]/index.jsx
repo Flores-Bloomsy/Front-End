@@ -261,7 +261,15 @@ function PayOrder() {
                   <OrderStatus
                     paymentStatus={latestOrder.paymentStatus ?? false}
                   />
-                  <Link href={"/orders"}> Ver todas mis ordenes</Link>
+                  <Link href={"/orders"}>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      sx={{ mt: "20px" }}
+                    >
+                      Ver todas mis ordenes
+                    </Button>
+                  </Link>
                 </Box>
               ) : (
                 <PaypalButton

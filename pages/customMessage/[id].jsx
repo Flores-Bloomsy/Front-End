@@ -1,34 +1,17 @@
-import { getCustomMessageById } from "@/utils/apiCustomMessage";
-import { Container, Box } from "@mui/material";
+import { getAllOrders, getCustomMessageById } from "@/utils/apiCustomMessage";
+import { Container, Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export default function CustomMessagePage() {
-  const [customMessage, setCustomMessage] = useState(null);
-  const router = useRouter();
-  const { id } = router.query;
-  console.log("id", id);
-
-  useEffect(() => {
-    async function getMessage() {
-      if (!id) {
-        console.log("ID aún no está disponible");
-        return;
-      }
-      const message = await getCustomMessageById(id);
-      setCustomMessage(message);
-    }
-    getMessage();
-  }, [id]);
-  console.log("customMessage", customMessage);
-
+export default function CustomMessagePage({ customMessage }) {
   return (
     <Container
       maxWidth
       sx={{
         position: "relative",
-        height: "calc(100vh - 120px)",
+        minHeight: "calc(100vh - 120px)",
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         overflow: "auto",
@@ -48,12 +31,49 @@ export default function CustomMessagePage() {
           zIndex: -1,
         }}
       />
+      <Typography align="center" sx={{ fontSize: "2rem" }}>
+        <Typography variant="span" color="primary.main">
+          de{" "}
+        </Typography>{" "}
+        {customMessage?.sender}
+      </Typography>
+      <Typography sx={{ fontSize: "2rem" }}>
+        <Typography variant="span" color="primary.main">
+          para{" "}
+        </Typography>
+        {customMessage?.receiver}
+      </Typography>
       <Box
         sx={{
           zIndex: 1,
+          maxWidth: "100%",
+          padding: "16px",
+          "& img": {
+            maxWidth: "100%",
+            margin: "0 auto",
+          },
         }}
-        dangerouslySetInnerHTML={{ __html: customMessage }}
+        dangerouslySetInnerHTML={{ __html: customMessage?.message }}
       />
     </Container>
   );
+}
+
+export async function getStaticPaths() {
+  const orderId = await getAllOrders();
+  const paths = orderId.map((order) => ({
+    params: {
+      id: order._id.toString(),
+    },
+  }));
+  return { paths, fallback: "blocking" };
+}
+
+export async function getStaticProps({ params }) {
+  const { id } = params;
+  const customMessage = await getCustomMessageById(id);
+
+  return {
+    props: { customMessage },
+  };
 }

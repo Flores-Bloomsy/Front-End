@@ -45,3 +45,19 @@ export async function getCustomMessageById(id) {
     throw new Error(error.message);
   }
 }
+
+export async function getAllOrders() {
+  try {
+    const response = await fetch(`${API_URL}/order/get-orders`);
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Something went wrong");
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}

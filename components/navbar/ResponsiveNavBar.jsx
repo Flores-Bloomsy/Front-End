@@ -126,7 +126,7 @@ export default function ResponsiveNavBar() {
 
     setUser(null);
 
-    router.push("/register-user/login");
+    // router.push("/register-user/login");
   }
 
   useEffect(() => {

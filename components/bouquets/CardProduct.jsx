@@ -3,7 +3,6 @@ import {
   CardActionArea,
   CardActions,
   CardContent,
-  CardMedia,
   Grid2,
   Link,
   Typography,
@@ -22,6 +21,7 @@ export default function CardProduct({ props }) {
           display: "flex",
           flexDirection: "column",
           minHeight: "100%",
+          minWidth: "250px",
         }}
       >
         <Link href={`bouquet/${props._id}`} underline="none">
@@ -36,6 +36,7 @@ export default function CardProduct({ props }) {
                 objectFit: "cover",
                 width: "100%",
                 overflow: "hidden",
+                height: "250px",
               }}
             />
           </CardActionArea>

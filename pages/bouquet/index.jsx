@@ -144,6 +144,7 @@ export default function Bouquets({ bouquets }) {
           spacing={2}
           sx={{ marginTop: 2 }}
           justifyContent="center"
+          width="100%"
         >
           {filteredBouquets.length === 0 && (
             <h1>No hay resultados para tu búsqueda</h1>

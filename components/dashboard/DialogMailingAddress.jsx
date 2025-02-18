@@ -9,12 +9,10 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ProductCard } from "./seller/ProductCard";
-import PrintQR from "./PrintQR";
+import Image from "next/image";
 
 export function DialogMailingAddress({ open, onClose, order }) {
   const [token, setToken] = useState(null);
-  const [showQRDialog, setShowQRDialog] = useState(false);
-  console.log("orden", order?.qrCode);
 
   const mailingAddres = [
     { label: "Recibe", value: order?.shippingAddress?.name },
@@ -37,13 +35,26 @@ export function DialogMailingAddress({ open, onClose, order }) {
     setToken(decodedLocalToken);
   }, []);
 
-  function handlePrintQR() {
-    setShowQRDialog(true);
+  //funcion para descargar qr
+  async function HandleDownloadQR() {
+    try {
+      const response = await fetch(order?.qrCode);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `qr-code-order-${order?.orderNumber}.png`;
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading QR code", error);
+    }
   }
 
-  function handleCloseQRDialog() {
-    setShowQRDialog(false);
-  }
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>Informacion del Pedido</DialogTitle>
@@ -82,21 +93,20 @@ export function DialogMailingAddress({ open, onClose, order }) {
               >
                 ** No olvides imprimir el QR y adjuntarlo al paquete **
               </Typography>
+              <Image
+                src={order?.qrCode}
+                alt="qr-code"
+                width={250}
+                height={250}
+              />
               <Button
                 sx={{ width: "fit-content" }}
                 variant="contained"
-                onClick={handlePrintQR}
+                onClick={HandleDownloadQR}
               >
-                Ver e Imprimir QR
+                Descargar QR
               </Button>
             </>
-          )}
-          {showQRDialog && (
-            <PrintQR
-              open={showQRDialog}
-              onClose={handleCloseQRDialog}
-              qrCode={order?.qrCode}
-            />
           )}
         </Stack>
         <Stack spacing={1}>

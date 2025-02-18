@@ -11,7 +11,7 @@ import { configProfile, getUserById } from "@/utils/apiSeller";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { configProfileSchema } from "@/utils/yupSchema";
 
-import { Box, Container } from "@mui/material";
+import { Alert, Box, Container } from "@mui/material";
 
 export default function Config() {
   const [user, setUser] = useState(null);
@@ -57,7 +57,8 @@ export default function Config() {
     setImageUrl(newImageUrl);
   }
   async function onSubmit(data) {
-    //formato de es balido en el backend
+    setError(null);
+    //formato que es valido en el backend
     const dataUpdate = {
       profilePic: image,
       phone: data.phone,
@@ -86,7 +87,7 @@ export default function Config() {
       const updateProfile = await configProfile(dataUpdate, userId, role);
 
       if (updateProfile) {
-        router.push("/");
+        router.push("/dashboard");
         setIsSubmitting(false);
       }
     } catch (error) {
@@ -122,6 +123,11 @@ export default function Config() {
             textoButton={"enviar formulario"}
           />
         </Box>
+        {error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {error}
+          </Alert>
+        )}
       </form>
     </Container>
   );
